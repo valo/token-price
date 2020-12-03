@@ -14,16 +14,16 @@ def isLiquid(pair):
 
 def getUSDCPath(token):
   try:
-    pair = interface.UniswapPair(UNISWAP_FACTORY.getPair(token, USDC))
+    pair = interface.UniswapPair(UNISWAP_FACTORY.getPair(token, WETH))
     if isLiquid(pair):
-      return [token, USDC]
+      return [token, WETH, USDC]
   except ContractNotFound:
     pass
 
   try:
-    pair = interface.UniswapPair(UNISWAP_FACTORY.getPair(token, WETH))
+    pair = interface.UniswapPair(UNISWAP_FACTORY.getPair(token, USDC))
     if isLiquid(pair):
-      return [token, WETH, USDC]
+      return [token, USDC]
   except ContractNotFound:
     pass
 
