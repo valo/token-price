@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 load_dotenv()
 
-from flask import Flask
+from flask import Flask, request
 app = Flask(__name__)
 
 import sys
@@ -14,8 +14,14 @@ from scripts.utils import priceOf, priceOfUniPair
 
 @app.route('/token_price/<address>')
 def token_price(address):
-    return str(priceOf(p.interface.ERC20(address)))
+    return str(priceOf(
+        p.interface.ERC20(address),
+        router_address=request.args.get("router", "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D")
+    ))
 
 @app.route('/uniswap_pair_price/<address>')
 def uniswap_pair_price(address):
-    return str(priceOfUniPair(p.interface.UniswapPair(address)))
+    return str(priceOfUniPair(
+        p.interface.UniswapPair(address),
+        router_address=request.args.get("router", "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D")
+    ))
