@@ -8,33 +8,33 @@ USDC = interface.ERC20("0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48")
 UNISWAP_ROUTER = interface.UniswapRouterV2("0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D")
 UNISWAP_FACTORY = interface.UniswapFactoryV2("0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f")
 
-def isLiquid(pair):
-  (token0Reserves, token1Reserves, timestamp) = pair.getReserves()
-  return datetime.fromtimestamp(timestamp) > datetime.now() - timedelta(days=1)
+def getReserves(token, otherToken):
+  try:
+    pair = interface.UniswapPair(UNISWAP_FACTORY.getPair(token, otherToken))
+  except ContractNotFound:
+    return 0
+
+  (token0Reserves, token1Reserves, _) = pair.getReserves()
+
+  if token == pair.token0():
+    return token0Reserves
+  else:
+    return token1Reserves
 
 def getUSDCPath(token):
-  try:
-    pair = interface.UniswapPair(UNISWAP_FACTORY.getPair(token, WETH))
-    if isLiquid(pair):
-      return [token, WETH, USDC]
-  except ContractNotFound:
-    pass
+  reservesInWETH = getReserves(token, WETH)
+  reservesInUSDC = getReserves(token, USDC)
+  reservesInDAI = getReserves(token, DAI)
 
-  try:
-    pair = interface.UniswapPair(UNISWAP_FACTORY.getPair(token, USDC))
-    if isLiquid(pair):
-      return [token, USDC]
-  except ContractNotFound:
-    pass
+  maxReserves = max(reservesInDAI, reservesInUSDC, reservesInWETH)
 
-  try:
-    pair = interface.UniswapPair(UNISWAP_FACTORY.getPair(token, DAI))
-    if isLiquid(pair):
-      return [token, DAI, USDC]
-  except ContractNotFound:
-    pass
+  if reservesInDAI == maxReserves:
+    return [token, DAI, USDC]
 
-  raise f"Can't find path for token {token}"
+  if reservesInWETH == maxReserves:
+    return [token, WETH, USDC]
+
+  return [token, USDC]
 
 def priceOf(token):
   return UNISWAP_ROUTER.getAmountsOut(10 ** token.decimals(), getUSDCPath(token))[-1] / 10 ** USDC.decimals()
