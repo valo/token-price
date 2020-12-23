@@ -7,19 +7,19 @@ DAI = interface.ERC20("0x6b175474e89094c44da98b954eedeac495271d0f")
 WETH = interface.ERC20("0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2")
 USDT = interface.ERC20("0xdac17f958d2ee523a2206206994597c13d831ec7")
 
-@lru_cache(maxsize=1024)
+@lru_cache
 def getFactory(router):
   return interface.UniswapFactoryV2(router.factory())
 
-@lru_cache(maxsize=1024)
+@lru_cache
 def getToken0(pair):
   return interface.ERC20(pair.token0())
 
-@lru_cache(maxsize=1024)
+@lru_cache
 def getToken1(pair):
   return interface.ERC20(pair.token1())
 
-@lru_cache(maxsize=1024)
+@lru_cache
 def getPair(factory, token0, token1):
   return interface.UniswapPair(factory.getPair(token0, token1))
 
