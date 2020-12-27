@@ -11,6 +11,7 @@ network.connect("mainnet")
 sys.modules["brownie"].interface = p.interface
 
 from scripts.utils import priceOf, priceOfUniPair
+from scripts.the_graph import pairStats
 
 @app.route('/token_price/<address>')
 def token_price(address):
@@ -25,3 +26,12 @@ def uniswap_pair_price(address):
         p.interface.UniswapPair(address),
         router_address=request.args.get("router", "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D")
     ))
+
+@app.route("/uniswap_pair_stats/<address>")
+def uniswap_pair_stats(address):
+    result = pairStats(address)
+
+    if result:
+        result["dailyFeeAPY"] = float(result["dailyVolumeUSD"]) * 0.003 / float(result["reserveUSD"]) * 365
+
+    return result
