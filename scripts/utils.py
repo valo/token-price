@@ -3,10 +3,10 @@ from brownie.exceptions import ContractNotFound
 from datetime import datetime, timedelta
 from functools import lru_cache
 
-DAI = interface.ERC20("0x6b175474e89094c44da98b954eedeac495271d0f")
-WETH = interface.ERC20("0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2")
-USDT = interface.ERC20("0xdac17f958d2ee523a2206206994597c13d831ec7")
-USDC = interface.ERC20("0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48")
+DAI = interface.IERC20("0x6b175474e89094c44da98b954eedeac495271d0f")
+WETH = interface.IERC20("0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2")
+USDT = interface.IERC20("0xdac17f958d2ee523a2206206994597c13d831ec7")
+USDC = interface.IERC20("0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48")
 
 @lru_cache
 def getFactory(router):
@@ -14,11 +14,11 @@ def getFactory(router):
 
 @lru_cache
 def getToken0(pair):
-  return interface.ERC20(pair.token0())
+  return interface.IERC20(pair.token0())
 
 @lru_cache
 def getToken1(pair):
-  return interface.ERC20(pair.token1())
+  return interface.IERC20(pair.token1())
 
 @lru_cache
 def getPair(factory, token0, token1):
@@ -37,7 +37,7 @@ def getReserves(token, otherToken, factory):
   else:
     return token1Reserves
 
-def getUSDCPath(token: interface.ERC20, router: interface.UniswapRouterV2):
+def getUSDCPath(token: interface.IERC20, router: interface.UniswapRouterV2):
   factory = getFactory(router)
   reservesInWETH = getReserves(token, WETH, factory)
   reservesInUSDT = getReserves(token, USDT, factory)
@@ -57,7 +57,7 @@ def getUSDCPath(token: interface.ERC20, router: interface.UniswapRouterV2):
 
   return [token, USDC]
 
-def priceOf(token: interface.ERC20, router_address: str):
+def priceOf(token: interface.IERC20, router_address: str):
   router = interface.UniswapRouterV2(router_address)
   return router.getAmountsOut(10 ** token.decimals(), getUSDCPath(token, router))[-1] / 10 ** USDT.decimals()
 
@@ -74,11 +74,11 @@ def priceOfUniPair(uni_pair: interface.UniswapPair, router_address: str):
 
   return total_pool / uni_pair.totalSupply() * 10 ** uni_pair.decimals()
 
-def priceOf1InchPair(oneinch_pair: interface.Mooniswap, router_address: str):
+def priceOf1InchPair(oneinch_pair: interface.IMooniswap, router_address: str):
   (token0, token1) = oneinch_pair.getTokens()
 
-  token0 = interface.ERC20(token0)
-  token1 = interface.ERC20(token1)
+  token0 = interface.IERC20(token0)
+  token1 = interface.IERC20(token1)
 
   token0Reserves = token0.balanceOf(oneinch_pair)
   token1Reserves = token1.balanceOf(oneinch_pair)

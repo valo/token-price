@@ -16,7 +16,7 @@ from scripts.the_graph import pairStats
 @app.route('/token_price/<address>')
 def token_price(address):
     return str(priceOf(
-        p.interface.ERC20(address),
+        p.interface.IERC20(address),
         router_address=request.args.get("router", "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D")
     ))
 
@@ -30,7 +30,7 @@ def uniswap_pair_price(address):
 @app.route('/1inch_pair_price/<address>')
 def oneinch_pair_price(address):
     return str(priceOf1InchPair(
-        p.interface.Mooniswap(address),
+        p.interface.IMooniswap(address),
         router_address=request.args.get("router", "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D")
     ))
 
