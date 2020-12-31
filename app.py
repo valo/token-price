@@ -5,6 +5,7 @@ from flask import Flask, request
 app = Flask(__name__)
 
 import sys
+import os
 from brownie import project, network
 p = project.load()
 network.connect("mainnet")
@@ -42,3 +43,7 @@ def uniswap_pair_stats(address):
         result["dailyFeeAPY"] = float(result["dailyVolumeUSD"]) * 0.003 / float(result["reserveUSD"]) * 365
 
     return result
+
+if __name__ == '__main__':
+  port = int(os.environ.get('PORT', 5000))
+  app.run(host = '0.0.0.0', port = port)

@@ -48,7 +48,7 @@ def getUSDCPath(token: interface.IERC20, router: interface.UniswapRouterV2):
 
   if reservesInDAI == maxReserves:
     return [token, DAI, USDT]
-
+  
   if reservesInWETH == maxReserves:
     return [token, WETH, USDT]
 
