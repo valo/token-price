@@ -10,7 +10,7 @@ p = project.load()
 network.connect("mainnet")
 sys.modules["brownie"].interface = p.interface
 
-from scripts.utils import priceOf, priceOfUniPair
+from scripts.utils import priceOf, priceOf1InchPair, priceOfUniPair
 from scripts.the_graph import pairStats
 
 @app.route('/token_price/<address>')
@@ -24,6 +24,13 @@ def token_price(address):
 def uniswap_pair_price(address):
     return str(priceOfUniPair(
         p.interface.UniswapPair(address),
+        router_address=request.args.get("router", "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D")
+    ))
+
+@app.route('/1inch_pair_price/<address>')
+def oneinch_pair_price(address):
+    return str(priceOf1InchPair(
+        p.interface.Mooniswap(address),
         router_address=request.args.get("router", "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D")
     ))
 

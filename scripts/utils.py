@@ -73,3 +73,19 @@ def priceOfUniPair(uni_pair: interface.UniswapPair, router_address: str):
   total_pool = token0Reserves * token0Price / 10 ** token0.decimals() + token1Reserves * token1Price / 10 ** token1.decimals()
 
   return total_pool / uni_pair.totalSupply() * 10 ** uni_pair.decimals()
+
+def priceOf1InchPair(oneinch_pair: interface.Mooniswap, router_address: str):
+  (token0, token1) = oneinch_pair.getTokens()
+
+  token0 = interface.ERC20(token0)
+  token1 = interface.ERC20(token1)
+
+  token0Reserves = token0.balanceOf(oneinch_pair)
+  token1Reserves = token1.balanceOf(oneinch_pair)
+
+  token0Price = priceOf(token0, router_address)
+  token1Price = priceOf(token1, router_address)
+
+  total_pool = token0Reserves * token0Price / 10 ** token0.decimals() + token1Reserves * token1Price / 10 ** token1.decimals()
+
+  return total_pool / oneinch_pair.totalSupply() * 10 ** oneinch_pair.decimals()
