@@ -77,8 +77,15 @@ def priceOfUniPair(uni_pair: interface.UniswapPair, router_address: str):
 def priceOf1InchPair(oneinch_pair: interface.IMooniswap, router_address: str):
   (token0, token1) = oneinch_pair.getTokens()
 
-  token0 = interface.IERC20(token0)
-  token1 = interface.IERC20(token1)
+  if token0 == "0x0000000000000000000000000000000000000000":
+    token0 = WETH
+  else:
+    token0 = interface.IERC20(token0)
+
+  if token1 == "0x0000000000000000000000000000000000000000":
+    token1 = WETH
+  else:
+    token1 = interface.IERC20(token1)
 
   token0Reserves = token0.balanceOf(oneinch_pair)
   token1Reserves = token1.balanceOf(oneinch_pair)
