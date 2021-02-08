@@ -1,0 +1,25 @@
+live:
+  - name: Ethereum
+    networks:
+      - chainid: 1
+        explorer: https://api.etherscan.io/api
+        host: https://mainnet.infura.io/v3/$WEB3_INFURA_PROJECT_ID
+        id: mainnet
+        name: Mainnet (Infura)
+  - name: BSC
+    networks:
+      - chainid: 56
+        host: $BSC_RPC_ENDPOINT
+        id: bsc-mainnet
+        name: bsc-mainnet
+development:
+  - cmd: ganache-cli
+    cmd_settings:
+      accounts: 10
+      evm_version: istanbul
+      gas_limit: 12000000
+      mnemonic: brownie
+      port: 8545
+    host: http://127.0.0.1
+    id: development
+    name: Ganache-CLI

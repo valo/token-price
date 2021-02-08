@@ -1,12 +1,13 @@
+import os
 from brownie import interface
 from brownie.exceptions import ContractNotFound
 from datetime import datetime, timedelta
 from functools import lru_cache
 
-DAI = interface.IERC20("0x6b175474e89094c44da98b954eedeac495271d0f")
-WETH = interface.IERC20("0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2")
-USDT = interface.IERC20("0xdac17f958d2ee523a2206206994597c13d831ec7")
-USDC = interface.IERC20("0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48")
+DAI = interface.IERC20(os.environ.get('DAI_ADDRESS', "0x6b175474e89094c44da98b954eedeac495271d0f"))
+WETH = interface.IERC20(os.environ.get('WETH_ADDRESS', "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"))
+USDT = interface.IERC20(os.environ.get('USDT_ADDRESS', "0xdac17f958d2ee523a2206206994597c13d831ec7"))
+USDC = interface.IERC20(os.environ.get('USDC_ADDRESS', "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"))
 
 @lru_cache
 def getFactory(router):

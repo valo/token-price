@@ -4,3 +4,4 @@ __pycache__
 reports
 Dockerfile
 heroku.yml
+.env
