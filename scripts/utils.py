@@ -59,6 +59,9 @@ def getUSDCPath(token: interface.IERC20, router: interface.UniswapRouterV2):
   return [token, USDC]
 
 def priceOf(token: interface.IERC20, router_address: str):
+  if token == USDC or token == USDT:
+    return 1.0
+
   router = interface.UniswapRouterV2(router_address)
   path = getUSDCPath(token, router)
   return router.getAmountsOut(10 ** token.decimals() / 100, path)[-1] / 10 ** path[-1].decimals() * 100
