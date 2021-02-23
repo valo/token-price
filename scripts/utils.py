@@ -41,7 +41,7 @@ def getReserves(token, otherToken, factory):
 def getUSDCPath(token: interface.IERC20, router: interface.UniswapRouterV2):
   factory = getFactory(router)
   if token != WETH:
-    reservesInWETH = getReserves(USDC, WETH, factory)
+    reservesInWETH = getReserves(WETH, token, factory) * priceOf(WETH, router)
   else:
     reservesInWETH = 0
 
