@@ -52,8 +52,9 @@ app.wsgi_app = DispatcherMiddleware(app.wsgi_app, {
     '/metrics': make_wsgi_app()
 })
 
+metrics.run(p)
+
 if __name__ == '__main__':
   port = int(os.environ.get('PORT', 5000))
-  metrics.run(p)
 
   app.run(host = '0.0.0.0', port = port)
