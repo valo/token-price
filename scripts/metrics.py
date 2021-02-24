@@ -9,12 +9,19 @@ from .utils import priceOf, priceOfUniPair
 
 VIKING_MASTER_CHEF = interface.VikingMasterChef("0xEf6e807fD2c0Ef5883A03Ed1b962333E8C9b725f")
 OATSWAP_MASTER_CHEF = interface.OatMasterChef("0x96aA7C001576a7C581Ef01655f34B674d4D17de1")
+ICECREAM_MASTER_CHEF = interface.IceCreamMasterChef("0xC26316b19117495E89c187339Ddb6E86f1e39f0c")
+
 PANCAKE_USDT_BUSD = interface.UniswapPair("0xc15fa3e22c912a276550f3e5fe3b0deb87b55acd")
 PANCAKE_DAI_BUSD = interface.UniswapPair("0x3ab77e40340ab084c3e23be8e5a6f7afed9d41dc")
 PANCAKE_USDC_BUSD = interface.UniswapPair("0x680dd100e4b394bda26a59dd5c119a391e747d18")
 PANCAKE_VAI_BUSD = interface.UniswapPair("0xff17ff314925dff772b71abdff2782bc913b3575")
 PANCAKE_UST_BUSD = interface.UniswapPair("0xd1f12370b2ba1c79838337648f820a87edf5e1e6")
 PANCAKESWAP_ROUTER = "0x05ff2b0db69458a0750badebc4f9e13add608c7f"
+
+ICECREAM_USDT_BUSD = interface.UniswapPair("0x57Bcf3Bb68f6E8DF00b9e6AD6aF8cE58fe7FC350")
+ICECREAM_BUSD_BNB = interface.UniswapPair("0x875DfffcBd97f6C7038E97A4959B0590C8714e1c")
+ICECREAM_ETH_BNB = interface.UniswapPair("0x68c277E93D9EB923E2EA9bfFC643307E731C044f")
+ICECREAMSWAP_ROUTER = "0x6728f3c8241C44Cc741C9553Ff7824ba9E932A4A"
 
 BSC_DAI = interface.IERC20("0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82")
 BSC_BUSD = interface.IERC20("0xe9e7cea3dedca5984780bafc599bd69add087d56")
@@ -76,6 +83,17 @@ MASTER_CHEF_FARMS = {
       ("VAI", BSC_VAI),
       ("ETH", BSC_ETH),
       ("BTC", BSC_BTC)
+    ]
+  ),
+  "IceCream": (
+    ICECREAM_MASTER_CHEF,
+    "cream",
+    "creamPerBlock",
+    ICECREAMSWAP_ROUTER,
+    [
+      ("USDT_BUSD", ICECREAM_USDT_BUSD),
+      ("BUSD_BNB", ICECREAM_BUSD_BNB),
+      ("ETH_BNB", ICECREAM_ETH_BNB),
     ]
   )
 }
