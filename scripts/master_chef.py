@@ -1,9 +1,10 @@
 from brownie import Contract, interface
-from .utils import priceOf, priceOfUniPair
+from .utils import priceOf
 
 def fetch_farm_info(
   contract,
   stake_token,
+  stake_token_price_func,
   reward_address_method_name,
   reward_per_block_method_name,
   block_time,
@@ -20,9 +21,9 @@ def fetch_farm_info(
 
   reward_per_block = getattr(contract, reward_per_block_method_name)() / 10 ** reward_token.decimals()
 
-  lp_token_price = priceOfUniPair(interface.UniswapPair(stake_token), router_address)
+  stake_token_price = stake_token_price_func(stake_token, router_address)
 
-  tvl = lp_token_price * stake_token.balanceOf(contract) / 10 ** stake_token.decimals()
+  tvl = stake_token_price * stake_token.balanceOf(contract) / 10 ** stake_token.decimals()
 
   apr = 60 / block_time * 60 * 24 * 365 * reward_token_price * percent_of_rewards * reward_per_block / tvl
 
