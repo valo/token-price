@@ -5,12 +5,12 @@ from scripts.utils import priceOf
 
 TOKEN_PRICES = [
   (
-    Gauge("ethereum_price", "Ethereum price from Uniswap"),
+    Gauge("price_ethereum", "Ethereum price from Uniswap"),
     "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
     "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D"
   ),
   (
-    Gauge("bitcoin_price", "Bitcoin price from Uniswap"),
+    Gauge("price_bitcoin", "Bitcoin price from Uniswap"),
     "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
     "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D"
   ),
