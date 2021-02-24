@@ -16,7 +16,6 @@ sys.modules["brownie"].interface = p.interface
 
 from scripts.utils import priceOf, priceOf1InchPair, priceOfUniPair
 from scripts.the_graph import pairStats
-import scripts.metrics as metrics
 
 @app.route('/token_price/<address>')
 def token_price(address):
@@ -48,11 +47,13 @@ def uniswap_pair_stats(address):
 
     return result
 
-app.wsgi_app = DispatcherMiddleware(app.wsgi_app, {
-    '/metrics': make_wsgi_app()
-})
 
-metrics.run(p)
+if os.environ.get('RUN_METRICS', '0') == '1':
+    app.wsgi_app = DispatcherMiddleware(app.wsgi_app, {
+        '/metrics': make_wsgi_app()
+    })
+    import scripts.metrics as metrics
+    metrics.run(p)
 
 if __name__ == '__main__':
   port = int(os.environ.get('PORT', 5000))
