@@ -2,6 +2,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from flask import Flask, request
+from werkzeug.middleware.dispatcher import DispatcherMiddleware
+from prometheus_client import make_wsgi_app
+
 app = Flask(__name__)
 
 import sys
@@ -13,6 +16,7 @@ sys.modules["brownie"].interface = p.interface
 
 from scripts.utils import priceOf, priceOf1InchPair, priceOfUniPair
 from scripts.the_graph import pairStats
+import scripts.metrics as metrics
 
 @app.route('/token_price/<address>')
 def token_price(address):
@@ -44,6 +48,12 @@ def uniswap_pair_stats(address):
 
     return result
 
+app.wsgi_app = DispatcherMiddleware(app.wsgi_app, {
+    '/metrics': make_wsgi_app()
+})
+
 if __name__ == '__main__':
   port = int(os.environ.get('PORT', 5000))
+  metrics.run(p)
+
   app.run(host = '0.0.0.0', port = port)

@@ -3,3 +3,4 @@ Flask==1.1.2
 python-dotenv==0.15.0
 gunicorn==19.9.0
 python-graphql-client==0.4.2
+prometheus-client==0.9.0
