@@ -14,6 +14,6 @@ COPY . /app
 
 RUN brownie compile
 
-ENTRYPOINT [ "python" ]
+ENTRYPOINT [ "gunicorn" ]
 
-CMD [ "app.py" ]
+CMD [ "-b", "0.0.0.0:5000", "app:app" ]
