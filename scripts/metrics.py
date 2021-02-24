@@ -12,6 +12,9 @@ PANCAKE_DAI_BUSD = interface.IERC20("0x3ab77e40340ab084c3e23be8e5a6f7afed9d41dc"
 PANCAKE_USDC_BUSD = interface.IERC20("0x680dd100e4b394bda26a59dd5c119a391e747d18")
 PANCAKESWAP_ROUTER = "0x05ff2b0db69458a0750badebc4f9e13add608c7f"
 
+FARM_TVL = Gauge("farm_tvl_dollars", "Farm TVL in dollars", ["project", "staked_token"])
+FARM_APR = Gauge("farm_apr_percent", "Farm APR in percent as 0-1.0", ["project", "staked_token"])
+
 TOKEN_PRICES = [
   (
     Gauge("price_ethereum", "Ethereum price from Uniswap"),
@@ -27,10 +30,8 @@ TOKEN_PRICES = [
 
 MASTER_CHEF_FARMS = [
   (
-    (
-      Gauge("farm_viking_tvl_usdt_busd", "Viking USDT/BUSD TVL"),
-      Gauge("farm_viking_apr_usdt_busd", "Viking USDT/BUSD APR")
-    ),
+    ("viking", "USDT_BUSD"),
+    (FARM_TVL, FARM_APR),
     [
       VIKING_MASTER_CHEF,
       PANCAKE_USDT_BUSD,
@@ -41,10 +42,8 @@ MASTER_CHEF_FARMS = [
     ]
   ),
   (
-    (
-      Gauge("farm_viking_tvl_dai_busd", "Viking USDT/BUSD TVL"),
-      Gauge("farm_viking_apr_dai_busd", "Viking USDT/BUSD APR")
-    ),
+    ("viking", "DAI_BUSD"),
+    (FARM_TVL, FARM_APR),
     [
       VIKING_MASTER_CHEF,
       PANCAKE_DAI_BUSD,
@@ -55,10 +54,8 @@ MASTER_CHEF_FARMS = [
     ]
   ),
   (
-    (
-      Gauge("farm_viking_tvl_usdc_busd", "Viking USDT/BUSD TVL"),
-      Gauge("farm_viking_apr_usdc_busd", "Viking USDT/BUSD APR")
-    ),
+    ("viking", "USDC_BUSD"),
+    (FARM_TVL, FARM_APR),
     [
       VIKING_MASTER_CHEF,
       PANCAKE_USDC_BUSD,
@@ -75,11 +72,11 @@ def update_metrics():
     for gauge, address, router in TOKEN_PRICES:
       gauge.set(priceOf(interface.ERC20(address), router_address=router))
 
-    for gauges, args in MASTER_CHEF_FARMS:
+    for labels, gauges, args in MASTER_CHEF_FARMS:
       tvl, apy = master_chef.fetch_farm_info(*args)
 
-      gauges[0].set(tvl)
-      gauges[1].set(apy)
+      gauges[0].labels(*labels).set(tvl)
+      gauges[1].labels(*labels).set(apy)
 
     time.sleep(15)
 

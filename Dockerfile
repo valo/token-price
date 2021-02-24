@@ -9,10 +9,13 @@ RUN pip install -r requirements.txt
 ENV HOME /app
 
 COPY ./network-config.yaml $HOME/.brownie/network-config.yaml
-
-COPY . /app
+COPY ./brownie-config.yaml /app
+COPY ./contracts /app/contracts
+COPY ./interfaces /app/interfaces
 
 RUN brownie compile
+
+COPY . /app
 
 ENTRYPOINT [ "gunicorn" ]
 
