@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 import sys
 import os
-from brownie import project, network
+from brownie import project, network, Contract
 p = project.load()
 network.connect(os.environ.get('NETWORK', 'mainnet'))
 sys.modules["brownie"].interface = p.interface
@@ -47,13 +47,12 @@ def uniswap_pair_stats(address):
 
     return result
 
-
 if os.environ.get('RUN_METRICS', '0') == '1':
     app.wsgi_app = DispatcherMiddleware(app.wsgi_app, {
         '/metrics': make_wsgi_app()
     })
     import scripts.metrics as metrics
-    metrics.run(p)
+    metrics.run()
 
 if __name__ == '__main__':
   port = int(os.environ.get('PORT', 5000))

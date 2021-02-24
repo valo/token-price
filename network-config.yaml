@@ -12,6 +12,7 @@ live:
         host: $BSC_RPC_ENDPOINT
         id: bsc-mainnet
         name: bsc-mainnet
+        explorer: https://api.bscscan.com/api
   - name: HECO
     networks:
       - chainid: 128
