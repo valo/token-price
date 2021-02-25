@@ -18,6 +18,9 @@ PANCAKE_DAI_BUSD = interface.UniswapPair("0x3ab77e40340ab084c3e23be8e5a6f7afed9d
 PANCAKE_USDC_BUSD = interface.UniswapPair("0x680dd100e4b394bda26a59dd5c119a391e747d18")
 PANCAKE_VAI_BUSD = interface.UniswapPair("0xff17ff314925dff772b71abdff2782bc913b3575")
 PANCAKE_UST_BUSD = interface.UniswapPair("0xd1f12370b2ba1c79838337648f820a87edf5e1e6")
+PANCAKE_BNB_BUSD = interface.UniswapPair("0x1b96b92314c44b159149f7e0303511fb2fc4774f")
+PANCAKE_BNB_BTC = interface.UniswapPair("0x7561eee90e24f3b348e1087a005f78b4c8453524")
+PANCAKE_BNB_ETH = interface.UniswapPair("0x70d8929d04b60af4fb9b58713ebcf18765ade422")
 PANCAKESWAP_ROUTER = "0x05ff2b0db69458a0750badebc4f9e13add608c7f"
 
 ICECREAM_USDT_BUSD = interface.UniswapPair("0x57Bcf3Bb68f6E8DF00b9e6AD6aF8cE58fe7FC350")
@@ -32,6 +35,7 @@ BSC_USDC = interface.IERC20("0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d")
 BSC_VAI = interface.IERC20("0x4bd17003473389a42daf6a0a729f6fdb328bbbd7")
 BSC_ETH = interface.IERC20("0x2170ed0880ac9a755fd29b2688956bd959f933f8")
 BSC_BTC = interface.IERC20("0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c")
+BSC_BNB = interface.IERC20("0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c")
 
 FARM_TVL = Gauge("farm_tvl_dollars", "Farm TVL in dollars", ["project", "staked_token"])
 FARM_APR = Gauge("farm_apr_percent", "Farm APR in percent as 0-1.0", ["project", "staked_token"])
@@ -64,7 +68,7 @@ MASTER_CHEF_FARMS = {
       ("USDT", BSC_USDT),
       ("USDC", BSC_USDC),
       ("ETH", BSC_ETH),
-      ("BTC", BSC_BTC)
+      ("BTC", BSC_BTC),
     ]
   ),
   "OatSwap": (
@@ -78,13 +82,17 @@ MASTER_CHEF_FARMS = {
       ("USDC_BUSD", PANCAKE_USDC_BUSD),
       ("VAI_BUSD", PANCAKE_VAI_BUSD),
       ("UST_BUSD", PANCAKE_UST_BUSD),
+      ("BNB_BUSD", PANCAKE_BNB_BUSD),
+      ("BNB_ETH", PANCAKE_BNB_ETH),
+      ("BNB_BTC", PANCAKE_BNB_BTC),
       ("BUSD", BSC_BUSD),
       ("DAI", BSC_DAI),
       ("USDT", BSC_USDT),
       ("USDC", BSC_USDC),
       ("VAI", BSC_VAI),
       ("ETH", BSC_ETH),
-      ("BTC", BSC_BTC)
+      ("BTC", BSC_BTC),
+      ("BNB", BSC_BNB),
     ]
   ),
   "IceCream": (
@@ -107,12 +115,16 @@ MASTER_CHEF_FARMS = {
       ("USDT_BUSD", PANCAKE_USDT_BUSD),
       ("DAI_BUSD", PANCAKE_DAI_BUSD),
       ("USDC_BUSD", PANCAKE_USDC_BUSD),
+      ("BNB_BUSD", PANCAKE_BNB_BUSD),
+      ("BNB_ETH", PANCAKE_BNB_ETH),
+      ("BNB_BTC", PANCAKE_BNB_BTC),
       ("BUSD", BSC_BUSD),
       ("USDT", BSC_USDT),
       ("DAI", BSC_DAI),
       ("USDC", BSC_USDC),
       ("BTC", BSC_BTC),
       ("ETH", BSC_ETH),
+      ("BNB", BSC_BNB),
     ]
   ),
   "Slime": (
@@ -123,11 +135,15 @@ MASTER_CHEF_FARMS = {
     [
       ("USDT_BUSD", PANCAKE_USDT_BUSD),
       ("DAI_BUSD", PANCAKE_DAI_BUSD),
+      ("BNB_BUSD", PANCAKE_BNB_BUSD),
+      ("BNB_BTC", PANCAKE_BNB_BTC),
+      ("BNB_ETH", PANCAKE_BNB_ETH),
       ("BUSD", BSC_BUSD),
       ("USDT", BSC_USDT),
       ("DAI", BSC_DAI),
       ("BTC", BSC_BTC),
       ("ETH", BSC_ETH),
+      ("BNB", BSC_BNB),
     ]
   ),
 }
