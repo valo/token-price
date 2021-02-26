@@ -194,7 +194,7 @@ def update_metrics():
           FARM_APR.labels(farm, stake_token_name).set(apy)
         except ValueError as e:
           print(f"Error while fetching APY for {farm} {stake_token_name}")
-          traceback.print_exception(e)
+          traceback.print_exc()
 
     time.sleep(int(os.environ.get('METRICS_SLEEP_SEC', 15)))
 
