@@ -1,6 +1,7 @@
 import threading
 import time
 import os
+import traceback
 from brownie import interface, Contract
 from prometheus_client import Gauge
 from scripts.utils import priceOf
@@ -179,17 +180,21 @@ def update_metrics():
       contract, reward_address_method_name, reward_per_block_method_name, router_address, stake_tokens = MASTER_CHEF_FARMS[farm]
 
       for stake_token_name, stake_token in stake_tokens:
-        tvl, apy = master_chef.fetch_farm_info(
-          contract,
-          stake_token,
-          reward_address_method_name,
-          reward_per_block_method_name,
-          3,
-          router_address
-        )
+        try:
+          tvl, apy = master_chef.fetch_farm_info(
+            contract,
+            stake_token,
+            reward_address_method_name,
+            reward_per_block_method_name,
+            3,
+            router_address
+          )
 
-        FARM_TVL.labels(farm, stake_token_name).set(tvl)
-        FARM_APR.labels(farm, stake_token_name).set(apy)
+          FARM_TVL.labels(farm, stake_token_name).set(tvl)
+          FARM_APR.labels(farm, stake_token_name).set(apy)
+        except ValueError as e:
+          print(f"Error while fetching APY for {farm} {stake_token_name}")
+          traceback.print_exception(e)
 
     time.sleep(int(os.environ.get('METRICS_SLEEP_SEC', 15)))
 
