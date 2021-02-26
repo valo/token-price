@@ -174,7 +174,11 @@ MASTER_CHEF_FARMS = {
 def update_metrics():
   while True:
     for gauge, address, router in TOKEN_PRICES:
-      gauge.set(priceOf(interface.ERC20(address), router_address=router))
+      try:
+        gauge.set(priceOf(interface.ERC20(address), router_address=router))
+      except ValueError as e:
+        print(f"Error while fetching price of {gauge._name}")
+        traceback.print_exc()
 
     for farm in MASTER_CHEF_FARMS:
       contract, reward_address_method_name, reward_per_block_method_name, router_address, stake_tokens = MASTER_CHEF_FARMS[farm]
