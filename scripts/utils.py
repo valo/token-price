@@ -34,9 +34,9 @@ def getReserves(token, otherToken, factory):
   (token0Reserves, token1Reserves, _) = pair.getReserves()
 
   if token == getToken0(pair):
-    return token0Reserves
+    return token0Reserves / 10**(token.decimals())
   else:
-    return token1Reserves
+    return token1Reserves / 10**(token.decimals())
 
 def getUSDCPath(token: interface.IERC20, router: interface.UniswapRouterV2):
   factory = getFactory(router)
@@ -52,7 +52,7 @@ def getUSDCPath(token: interface.IERC20, router: interface.UniswapRouterV2):
   maxReserves = max(reservesInDAI, reservesInUSDC, reservesInWETH, reservesInUSDT)
 
   if reservesInDAI == maxReserves:
-    return [token, DAI, USDT]
+    return [token, DAI]
   
   if reservesInWETH == maxReserves:
     return [token, WETH, USDC]

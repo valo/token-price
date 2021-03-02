@@ -9,10 +9,16 @@ live:
   - name: BSC
     networks:
       - chainid: 56
-        host: $BSC_RPC_ENDPOINT
-        id: bsc-mainnet
-        name: bsc-mainnet
+        host: https://bsc-dataseed2.defibit.io/
+        id: bsc
+        name: bsc
         explorer: https://api.bscscan.com/api
+  - name: MATIC
+    networks:
+      - chainid: 137
+        host: https://rpc-mainnet.maticvigil.com
+        id: matic
+        name: matic
   - name: HECO
     networks:
       - chainid: 128
