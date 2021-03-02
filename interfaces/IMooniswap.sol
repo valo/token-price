@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity >=0.6.2;
+pragma solidity ^0.5.16;
 
 import "./IERC20.sol";
 
-interface IMooniswap is IERC20 {
+interface IMooniswap {
     function getTokens() external view returns (IERC20[] memory tokens);
 
     function tokens(uint256 i) external view returns (IERC20);
