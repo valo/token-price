@@ -1,5 +1,4 @@
 from brownie import interface
-from prometheus_client import Gauge
 
 VIKING_MASTER_CHEF = interface.VikingMasterChef("0xEf6e807fD2c0Ef5883A03Ed1b962333E8C9b725f")
 OATSWAP_MASTER_CHEF = interface.OatMasterChef("0x96aA7C001576a7C581Ef01655f34B674d4D17de1")

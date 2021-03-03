@@ -11,7 +11,7 @@ import sys
 import os
 from brownie import project, network, Contract
 p = project.load()
-network.connect(os.environ.get('NETWORK', 'mainnet'))
+network.connect(os.environ.get('NETWORK', 'ethereum'))
 sys.modules["brownie"].interface = p.interface
 
 from scripts.utils import priceOf, priceOf1InchPair, priceOfUniPair

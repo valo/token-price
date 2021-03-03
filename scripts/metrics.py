@@ -8,12 +8,14 @@ from . import master_chef
 from . import staking_rewards
 from .utils import priceOf
 
-NETWORK = os.environ.get("NETWORK", "bsc")
+NETWORK = os.environ.get("NETWORK", "ethereum")
 
 if NETWORK == "bsc":
   from .networks.bsc import MASTER_CHEF_FARMS, TOKEN_PRICES, STAKING_REWARDS_FARMS
 elif NETWORK == "matic":
   from .networks.matic import MASTER_CHEF_FARMS, TOKEN_PRICES, STAKING_REWARDS_FARMS
+elif NETWORK == "ethereum":
+  from .networks.ethereum import MASTER_CHEF_FARMS, TOKEN_PRICES, STAKING_REWARDS_FARMS
 
 FARM_TVL = Gauge("farm_tvl_dollars", "Farm TVL in dollars", ["network", "project", "staked_token"])
 FARM_APR = Gauge("farm_apr_percent", "Farm APR in percent as 0-1.0", ["network", "project", "staked_token"])

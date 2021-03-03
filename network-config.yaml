@@ -4,8 +4,8 @@ live:
       - chainid: 1
         explorer: https://api.etherscan.io/api
         host: https://mainnet.infura.io/v3/$WEB3_INFURA_PROJECT_ID
-        id: mainnet
-        name: Mainnet (Infura)
+        id: ethereum
+        name: Ethereum Mainnet (Infura)
   - name: BSC
     networks:
       - chainid: 56
