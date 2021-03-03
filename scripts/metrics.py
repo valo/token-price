@@ -11,9 +11,9 @@ from .utils import priceOf
 NETWORK = os.environ.get("NETWORK", "bsc")
 
 if NETWORK == "bsc":
-  from .networks.bsc import MASTER_CHEF_FARMS, TOKEN_PRICES, STACKING_REWARDS_FARMS
+  from .networks.bsc import MASTER_CHEF_FARMS, TOKEN_PRICES, STAKING_REWARDS_FARMS
 elif NETWORK == "matic":
-  from .networks.matic import MASTER_CHEF_FARMS, TOKEN_PRICES, STACKING_REWARDS_FARMS
+  from .networks.matic import MASTER_CHEF_FARMS, TOKEN_PRICES, STAKING_REWARDS_FARMS
 
 FARM_TVL = Gauge("farm_tvl_dollars", "Farm TVL in dollars", ["network", "project", "staked_token"])
 FARM_APR = Gauge("farm_apr_percent", "Farm APR in percent as 0-1.0", ["network", "project", "staked_token"])
@@ -47,8 +47,8 @@ def update_metrics():
           print(f"Error while fetching APY for {farm} {stake_token_name}")
           traceback.print_exc()
 
-    for farm in STACKING_REWARDS_FARMS:
-      router_address, stake_tokens = STACKING_REWARDS_FARMS[farm]
+    for farm in STAKING_REWARDS_FARMS:
+      router_address, stake_tokens = STAKING_REWARDS_FARMS[farm]
 
       for stake_token_name, stake_contract in stake_tokens:
         try:
