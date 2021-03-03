@@ -6,7 +6,7 @@ from brownie import interface
 from prometheus_client import Gauge
 from . import master_chef
 from . import staking_rewards
-from .utils import priceOf
+from .utils import priceOf, priceOfUniPair
 
 NETWORK = os.environ.get("NETWORK", "ethereum")
 
@@ -27,7 +27,12 @@ def update_prices():
 
     for ticker, address in tokens:
       try:
-        PRICE.labels(NETWORK, ticker, dex).set(priceOf(interface.ERC20(address), router_address=router))
+        if address._name == "UniswapPair":
+          price = priceOfUniPair(address, router_address=router)
+        else:
+          price = priceOf(address, router_address=router)
+
+        PRICE.labels(NETWORK, ticker, dex).set(price)
       except ValueError as e:
         print(f"Error while fetching price of {ticker}")
         traceback.print_exc()

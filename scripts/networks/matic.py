@@ -15,6 +15,9 @@ MATIC_BTC = interface.IERC20("0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6")
 MATIC_QUICK = interface.IERC20("0x831753dd7087cac61ab5644b308642cc1c33dc13")
 MATIC_MATIC = interface.IERC20("0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270")
 
+QUICK_ETH_USDC = interface.UniswapPair("0x853ee4b2a13f8a742d64c8f088be7ba2131f670d")
+QUICK_ETH_DAI = interface.UniswapPair("0x4a35582a710e1f4b2030a3f826da20bfb6703c09")
+
 TOKEN_PRICES = {
   "Quickswap": (
     QUICKSWAP_ROUTER,
@@ -22,7 +25,9 @@ TOKEN_PRICES = {
       ("ETH", MATIC_ETH),
       ("BTC", MATIC_BTC),
       ("QUICK", MATIC_QUICK),
-      ("MATIC", MATIC_MATIC)
+      ("MATIC", MATIC_MATIC),
+      ("ETH_USDC", QUICK_ETH_USDC),
+      ("ETH_DAI", QUICK_ETH_DAI),
     ]
   )
 }
