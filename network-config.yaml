@@ -16,7 +16,7 @@ live:
   - name: MATIC
     networks:
       - chainid: 137
-        host: https://rpc-mainnet.maticvigil.com
+        host: $MATIC_RPC_ENDPOINT
         id: matic
         name: matic
   - name: HECO
