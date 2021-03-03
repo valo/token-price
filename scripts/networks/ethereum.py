@@ -23,6 +23,7 @@ UNI_DAI_ETH = interface.UniswapPair("0xa478c2975ab1ea89e8196811f51a7b7ade33eb11"
 UNI_ALPHA_ETH = interface.UniswapPair("0x411a9b902f364817a0f9c4261ce28b5566a42875")
 
 SUSHI_ALPHA_ibETHv2 = interface.UniswapPair("0xf79a07cd3488bbafb86df1bad09a6168d935c017")
+SUSHI_ALCX = interface.IERC20("0xdbdb4d16eda451d0503b854cf79d55697f90c8df")
 
 TOKEN_PRICES = {
   "Uniswap": (
@@ -47,7 +48,8 @@ TOKEN_PRICES = {
   "SushiSwap": (
     SUSHISWAP_ROUTER,
     [
-      ("ALPHA_ibETHv2", SUSHI_ALPHA_ibETHv2)
+      ("ALPHA_ibETHv2", SUSHI_ALPHA_ibETHv2),
+      ("ALCX", SUSHI_ALCX),
     ]
   ),
 }
