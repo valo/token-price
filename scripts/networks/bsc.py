@@ -51,6 +51,9 @@ TOKEN_PRICES = {
       ("ETH", BSC_ETH),
       ("BTC", BSC_BTC),
       ("BNB", BSC_BNB),
+      ("DAI_BUSD", PANCAKE_DAI_BUSD),
+      ("USDT_BUSD", PANCAKE_USDT_BUSD),
+      ("USDC_BUSD", PANCAKE_USDC_BUSD),
     ]
   )
 }
