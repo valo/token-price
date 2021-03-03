@@ -45,18 +45,16 @@ BSC_ETH = interface.IERC20("0x2170ed0880ac9a755fd29b2688956bd959f933f8")
 BSC_BTC = interface.IERC20("0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c")
 BSC_BNB = interface.IERC20("0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c")
 
-TOKEN_PRICES = [
-  (
-    Gauge("price_ethereum", "Ethereum price from Uniswap", ("network")),
-    BSC_ETH,
-    PANCAKESWAP_ROUTER
-  ),
-  (
-    Gauge("price_bitcoin", "Bitcoin price from Uniswap", ("network")),
-    BSC_BTC,
-    PANCAKESWAP_ROUTER
-  ),
-]
+TOKEN_PRICES = {
+  "PancakeSwap": (
+    PANCAKESWAP_ROUTER,
+    [
+      ("ETH", BSC_ETH),
+      ("BTC", BSC_BTC),
+      ("BNB", BSC_BNB),
+    ]
+  )
+}
 
 MASTER_CHEF_FARMS = {
   "Viking": (

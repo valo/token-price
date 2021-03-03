@@ -11,22 +11,22 @@ maUSDC_maTUSD_STAKING = interface.StakingRewards("0x5AE1e3Af79270e600D0e86609bB5
 maUSDC_maUSDT_STAKING = interface.StakingRewards("0x66aCCDc838F563D36D0695539c5A01E651eAAEC9")
 maUSDC_maDAI_STAKING = interface.StakingRewards("0x0A8E11C2C9B89285e810A206D391CE480dbA7562")
 
-MATIC_USDC = interface.IERC20("0x2791bca1f2de4661ed88a30c99a7a9449aa84174")
 MATIC_ETH = interface.IERC20("0x7ceb23fd6bc0add59e62ac25578270cff1b9f619")
 MATIC_BTC = interface.IERC20("0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6")
+MATIC_QUICK = interface.IERC20("0x831753dd7087cac61ab5644b308642cc1c33dc13")
+MATIC_MATIC = interface.IERC20("0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270")
 
-TOKEN_PRICES = [
-  (
-    Gauge("price_ethereum", "Ethereum price from Uniswap", ["network"]),
-    MATIC_ETH,
-    QUICKSWAP_ROUTER
-  ),
-  (
-    Gauge("price_bitcoin", "Bitcoin price from Uniswap", ["network"]),
-    MATIC_BTC,
-    QUICKSWAP_ROUTER
-  ),
-]
+TOKEN_PRICES = {
+  "Quickswap": (
+    QUICKSWAP_ROUTER,
+    [
+      ("ETH", MATIC_ETH),
+      ("BTC", MATIC_BTC),
+      ("QUICK", MATIC_QUICK),
+      ("MATIC", MATIC_MATIC)
+    ]
+  )
+}
 
 MASTER_CHEF_FARMS = {
 }
