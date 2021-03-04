@@ -5,6 +5,7 @@ OATSWAP_MASTER_CHEF = interface.OatMasterChef("0x96aA7C001576a7C581Ef01655f34B67
 ICECREAM_MASTER_CHEF = interface.IceCreamMasterChef("0xC26316b19117495E89c187339Ddb6E86f1e39f0c")
 GOOSE_MASTER_CHEF = interface.GooseMasterChef("0xe70E9185F5ea7Ba3C5d63705784D8563017f2E57")
 SLIME_MASTER_CHEF = interface.SlimeMasterChef("0x4B0073A79f2b46Ff5a62fA1458AAc86Ed918C80C")
+GOOSE_LAYER1_MASTER_CHEF = interface.IncubatorChef("0x22cC57c9ec341152834F216289A1824d61b47855")
 
 PANCAKE_USDT_BUSD = interface.UniswapPair("0xc15fa3e22c912a276550f3e5fe3b0deb87b55acd")
 PANCAKE_DAI_BUSD = interface.UniswapPair("0x3ab77e40340ab084c3e23be8e5a6f7afed9d41dc")
@@ -43,6 +44,7 @@ BSC_VAI = interface.IERC20("0x4bd17003473389a42daf6a0a729f6fdb328bbbd7")
 BSC_ETH = interface.IERC20("0x2170ed0880ac9a755fd29b2688956bd959f933f8")
 BSC_BTC = interface.IERC20("0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c")
 BSC_BNB = interface.IERC20("0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c")
+BSC_GG1 = interface.IERC20("0xa41497122BB9B9EB2EB1c5c872551e145bC3166B")
 
 TOKEN_PRICES = {
   "PancakeSwap": (
@@ -51,6 +53,7 @@ TOKEN_PRICES = {
       ("ETH", BSC_ETH),
       ("BTC", BSC_BTC),
       ("BNB", BSC_BNB),
+      ("GG1", BSC_GG1),
       ("DAI_BUSD", PANCAKE_DAI_BUSD),
       ("USDT_BUSD", PANCAKE_USDT_BUSD),
       ("USDC_BUSD", PANCAKE_USDC_BUSD),
@@ -129,6 +132,21 @@ MASTER_CHEF_FARMS = {
       ("BNB_BUSD", PANCAKE_BNB_BUSD),
       ("BNB_ETH", PANCAKE_BNB_ETH),
       ("BNB_BTC", PANCAKE_BNB_BTC),
+      ("BUSD", BSC_BUSD),
+      ("USDT", BSC_USDT),
+      ("DAI", BSC_DAI),
+      ("USDC", BSC_USDC),
+      ("BTC", BSC_BTC),
+      ("ETH", BSC_ETH),
+      ("BNB", BSC_BNB),
+    ]
+  ),
+  "GooseLayer1": (
+    GOOSE_LAYER1_MASTER_CHEF,
+    "goose",
+    "goosePerBlock",
+    PANCAKESWAP_ROUTER,
+    [
       ("BUSD", BSC_BUSD),
       ("USDT", BSC_USDT),
       ("DAI", BSC_DAI),
