@@ -4,6 +4,7 @@ import os
 import traceback
 from brownie import interface
 from prometheus_client import Gauge
+from requests.exceptions import HTTPError
 from . import master_chef
 from . import staking_rewards
 from .utils import priceOf, priceOfUniPair
@@ -78,11 +79,17 @@ def update_staking_rewards_farms():
 
 def update_metrics():
   while True:
-    update_prices()
+    try:
+      update_prices()
 
-    update_master_chef_farms()
+      update_master_chef_farms()
 
-    update_staking_rewards_farms()
+      update_staking_rewards_farms()
+    except HTTPError as e:
+      if e.response.status_code == 429:
+        print(f"Rate limited: {e}")
+      else:
+        raise
 
     time.sleep(int(os.environ.get('METRICS_SLEEP_SEC', 15)))
 
