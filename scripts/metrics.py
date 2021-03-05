@@ -40,7 +40,7 @@ def update_metrics():
 
   def update_master_chef_farms():
     for farm in MASTER_CHEF_FARMS():
-      contract, reward_address_method_name, reward_per_block_method_name, router_address, stake_tokens = MASTER_CHEF_FARMS[farm]
+      contract, reward_address_method_name, reward_per_block_method_name, router_address, stake_tokens = MASTER_CHEF_FARMS()[farm]
 
       for stake_token_name, stake_token in stake_tokens:
         try:
