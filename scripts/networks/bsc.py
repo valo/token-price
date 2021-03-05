@@ -1,11 +1,5 @@
+from functools import lru_cache
 from brownie import interface
-
-VIKING_MASTER_CHEF = interface.VikingMasterChef("0xEf6e807fD2c0Ef5883A03Ed1b962333E8C9b725f")
-OATSWAP_MASTER_CHEF = interface.OatMasterChef("0x96aA7C001576a7C581Ef01655f34B674d4D17de1")
-ICECREAM_MASTER_CHEF = interface.IceCreamMasterChef("0xC26316b19117495E89c187339Ddb6E86f1e39f0c")
-GOOSE_MASTER_CHEF = interface.GooseMasterChef("0xe70E9185F5ea7Ba3C5d63705784D8563017f2E57")
-SLIME_MASTER_CHEF = interface.SlimeMasterChef("0x4B0073A79f2b46Ff5a62fA1458AAc86Ed918C80C")
-GOOSE_LAYER1_MASTER_CHEF = interface.IncubatorChef("0x22cC57c9ec341152834F216289A1824d61b47855")
 
 PANCAKE_USDT_BUSD = interface.UniswapPair("0xc15fa3e22c912a276550f3e5fe3b0deb87b55acd")
 PANCAKE_DAI_BUSD = interface.UniswapPair("0x3ab77e40340ab084c3e23be8e5a6f7afed9d41dc")
@@ -46,7 +40,9 @@ BSC_BTC = interface.IERC20("0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c")
 BSC_BNB = interface.IERC20("0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c")
 BSC_GG1 = interface.IERC20("0xa41497122BB9B9EB2EB1c5c872551e145bC3166B")
 
-TOKEN_PRICES = {
+@lru_cache
+def TOKEN_PRICES():
+  return {
   "PancakeSwap": (
     PANCAKESWAP_ROUTER,
     [
@@ -61,7 +57,16 @@ TOKEN_PRICES = {
   )
 }
 
-MASTER_CHEF_FARMS = {
+@lru_cache
+def MASTER_CHEF_FARMS():
+  VIKING_MASTER_CHEF = interface.VikingMasterChef("0xEf6e807fD2c0Ef5883A03Ed1b962333E8C9b725f")
+  OATSWAP_MASTER_CHEF = interface.OatMasterChef("0x96aA7C001576a7C581Ef01655f34B674d4D17de1")
+  ICECREAM_MASTER_CHEF = interface.IceCreamMasterChef("0xC26316b19117495E89c187339Ddb6E86f1e39f0c")
+  GOOSE_MASTER_CHEF = interface.GooseMasterChef("0xe70E9185F5ea7Ba3C5d63705784D8563017f2E57")
+  SLIME_MASTER_CHEF = interface.SlimeMasterChef("0x4B0073A79f2b46Ff5a62fA1458AAc86Ed918C80C")
+  GOOSE_LAYER1_MASTER_CHEF = interface.IncubatorChef("0x22cC57c9ec341152834F216289A1824d61b47855")
+
+  return {
   "Viking": (
     VIKING_MASTER_CHEF,
     "viking",
@@ -179,5 +184,6 @@ MASTER_CHEF_FARMS = {
   ),
 }
 
-STAKING_REWARDS_FARMS = {
-}
+@lru_cache
+def STAKING_REWARDS_FARMS():
+  return {}

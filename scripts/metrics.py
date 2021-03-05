@@ -23,8 +23,8 @@ def update_metrics():
     from .networks.ethereum import MASTER_CHEF_FARMS, TOKEN_PRICES, STAKING_REWARDS_FARMS
 
   def update_prices():
-    for dex in TOKEN_PRICES:
-      router, tokens = TOKEN_PRICES[dex]
+    for dex in TOKEN_PRICES():
+      router, tokens = TOKEN_PRICES()[dex]
 
       for ticker, address in tokens:
         try:
@@ -39,7 +39,7 @@ def update_metrics():
           traceback.print_exc()
 
   def update_master_chef_farms():
-    for farm in MASTER_CHEF_FARMS:
+    for farm in MASTER_CHEF_FARMS():
       contract, reward_address_method_name, reward_per_block_method_name, router_address, stake_tokens = MASTER_CHEF_FARMS[farm]
 
       for stake_token_name, stake_token in stake_tokens:
@@ -60,8 +60,8 @@ def update_metrics():
           traceback.print_exc()
 
   def update_staking_rewards_farms():
-    for farm in STAKING_REWARDS_FARMS:
-      router_address, stake_tokens = STAKING_REWARDS_FARMS[farm]
+    for farm in STAKING_REWARDS_FARMS():
+      router_address, stake_tokens = STAKING_REWARDS_FARMS()[farm]
 
       for stake_token_name, stake_contract in stake_tokens:
         try:
