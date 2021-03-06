@@ -55,7 +55,7 @@ def TOKEN_PRICES():
     [
       ("ALPHA_ibETHv2", SUSHI_ALPHA_ibETHv2),
       ("ALCX", SUSHI_ALCX),
-      ("ALCX", SUSHI_ALCX_ETH),
+      ("ALCX_ETH", SUSHI_ALCX_ETH),
     ]
   ),
 }
