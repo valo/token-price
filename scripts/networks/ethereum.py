@@ -26,6 +26,8 @@ def TOKEN_PRICES():
   UNI_ALPHA_ETH = interface.UniswapPair("0x411a9b902f364817a0f9c4261ce28b5566a42875")
 
   SUSHI_ALPHA_ibETHv2 = interface.UniswapPair("0xf79a07cd3488bbafb86df1bad09a6168d935c017")
+  SUSHI_ALCX_ETH = interface.UniswapPair("0xc3f279090a47e80990fe3a9c30d24cb117ef91a8")
+
   SUSHI_ALCX = interface.IERC20("0xdbdb4d16eda451d0503b854cf79d55697f90c8df")
 
   return {
@@ -53,6 +55,7 @@ def TOKEN_PRICES():
     [
       ("ALPHA_ibETHv2", SUSHI_ALPHA_ibETHv2),
       ("ALCX", SUSHI_ALCX),
+      ("ALCX", SUSHI_ALCX_ETH),
     ]
   ),
 }
