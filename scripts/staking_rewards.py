@@ -20,6 +20,9 @@ def fetch_farm_info(
 
   tvl = stake_token_price * stake_token.balanceOf(stacking_contract) / 10 ** stake_token.decimals()
 
-  apr = reward_per_day * 365 * reward_token_price / tvl
+  if tvl > 0:
+    apr = reward_per_day * 365 * reward_token_price / tvl
+  else:
+    apr = 0
 
   return (tvl, apr)
