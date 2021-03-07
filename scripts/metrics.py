@@ -17,10 +17,13 @@ PRICE = Gauge("price", "Price of the token on a DEX", ["network", "ticker", "dex
 def update_metrics():
   if NETWORK == "bsc":
     from .networks.bsc import MASTER_CHEF_FARMS, TOKEN_PRICES, STAKING_REWARDS_FARMS
+    BLOCK_TIME = 3
   elif NETWORK == "matic":
     from .networks.matic import MASTER_CHEF_FARMS, TOKEN_PRICES, STAKING_REWARDS_FARMS
+    BLOCK_TIME = 2
   elif NETWORK == "ethereum":
     from .networks.ethereum import MASTER_CHEF_FARMS, TOKEN_PRICES, STAKING_REWARDS_FARMS
+    BLOCK_TIME = 15
 
   def update_prices():
     for dex in TOKEN_PRICES():
@@ -49,7 +52,7 @@ def update_metrics():
             stake_token,
             reward_address_method_name,
             reward_per_block_method_name,
-            3,
+            BLOCK_TIME,
             router_address
           )
 
