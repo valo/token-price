@@ -13,7 +13,6 @@ USDC = interface.IERC20("0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48")
 USDT = interface.IERC20("0xdac17f958d2ee523a2206206994597c13d831ec7")
 AAVE = interface.IERC20("0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9")
 
-
 @lru_cache()
 def TOKEN_PRICES():
   ONE_INCH = interface.IERC20("0x111111111117dc0aa78b770fa6a738034120c302")
@@ -27,6 +26,7 @@ def TOKEN_PRICES():
   SUSHI_ALCX_ETH = interface.UniswapPair("0xc3f279090a47e80990fe3a9c30d24cb117ef91a8")
 
   SUSHI_ALCX = interface.IERC20("0xdbdb4d16eda451d0503b854cf79d55697f90c8df")
+  SUSHI_ANY = interface.IERC20("0xf99d58e463a2e07e5692127302c20a191861b4d6")
 
   return {
   "Uniswap": (
@@ -53,6 +53,7 @@ def TOKEN_PRICES():
     [
       ("ALPHA_ibETHv2", SUSHI_ALPHA_ibETHv2),
       ("ALCX", SUSHI_ALCX),
+      ("ANY", SUSHI_ANY),
       ("ALCX_ETH", SUSHI_ALCX_ETH),
     ]
   ),
