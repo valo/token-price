@@ -90,7 +90,7 @@ def update_metrics():
       if e.response.status_code == 429:
         print(f"Rate limited: {e}")
       else:
-        raise
+        print(f"HTTP Error: {e}")
 
     time.sleep(int(os.environ.get('METRICS_SLEEP_SEC', 15)))
 
