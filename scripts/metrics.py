@@ -2,6 +2,7 @@ import threading
 import time
 import os
 import traceback
+import math
 from prometheus_client import Gauge
 from requests.exceptions import HTTPError
 from . import master_chef
@@ -13,6 +14,7 @@ NETWORK = os.environ.get("NETWORK", "ethereum")
 FARM_TVL = Gauge("farm_tvl_dollars", "Farm TVL in dollars", ["network", "project", "staked_token"])
 FARM_APR = Gauge("farm_apr_percent", "Farm APR in percent as 0-1.0", ["network", "project", "staked_token"])
 PRICE = Gauge("price", "Price of the token on a DEX", ["network", "ticker", "dex"])
+K_LAST_SQRT = Gauge("k_last_sqrt", "The square root of the kLast of an LP pair", ["network", "ticker", "dex"])
 
 def update_metrics():
   if NETWORK == "bsc":
@@ -33,6 +35,8 @@ def update_metrics():
         try:
           if address._name == "UniswapPair":
             price = priceOfUniPair(address, router_address=router)
+
+            K_LAST_SQRT.labels(NETWORK, ticker, dex).set(math.sqrt(address.kLast()))
           else:
             price = priceOf(address, router_address=router)
 
