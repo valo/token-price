@@ -23,6 +23,7 @@ def TOKEN_PRICES():
   LRC = interface.IERC20("0xbbbbca6a901c926f240b89eacb641d8aec7aeafd")
 
   UNI_FRAX_ETH = interface.UniswapPair("0xFD0A40Bc83C5faE4203DEc7e5929B446b07d1C76")
+  UNI_LUSD_ETH = interface.UniswapPair("0xf20ef17b889b437c151eb5ba15a47bfc62bff469")
 
   SUSHI_ALPHA_ibETHv2 = interface.UniswapPair("0xf79a07cd3488bbafb86df1bad09a6168d935c017")
   SUSHI_ALCX_ETH = interface.UniswapPair("0xc3f279090a47e80990fe3a9c30d24cb117ef91a8")
@@ -50,6 +51,7 @@ def TOKEN_PRICES():
       ("LRC", LRC),
       ("AAVE", AAVE),
       ("FRAX_ETH", UNI_FRAX_ETH),
+      ("LUSD_ETH", UNI_LUSD_ETH),
     ]
   ),
   "SushiSwap": (
