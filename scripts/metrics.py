@@ -39,7 +39,8 @@ def update_metrics():
           if address._name == "UniswapPair":
             price = priceOfUniPair(address, router_address=router)
 
-            K_LAST_SQRT.labels(NETWORK, ticker, dex).set(math.sqrt(address.kLast()))
+            reserve1, reserve2, _timestamp = address.getReserves()
+            K_LAST_SQRT.labels(NETWORK, ticker, dex).set(math.sqrt(reserve1 * reserve2))
           else:
             price = priceOf(address, router_address=router)
 
