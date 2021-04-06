@@ -53,6 +53,8 @@ def TOKEN_PRICES():
       ("DAI_BUSD", PANCAKE_DAI_BUSD),
       ("USDT_BUSD", PANCAKE_USDT_BUSD),
       ("USDC_BUSD", PANCAKE_USDC_BUSD),
+      ("BUSD_BNB", PANCAKE_BNB_BUSD),
+      ("ETH_BNB", PANCAKE_BNB_ETH),
     ]
   )
 }
