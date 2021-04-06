@@ -9,7 +9,7 @@ def TOKEN_PRICES():
 
   return {
   "MDex": (
-    QUICKSWAP_ROUTER,
+    MDEX_ROUTER,
     [
       ("HUSD_USDT", HUSD_USDT),
     ]
