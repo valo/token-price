@@ -14,7 +14,7 @@ NETWORK = os.environ.get("NETWORK", "ethereum")
 FARM_TVL = Gauge("farm_tvl_dollars", "Farm TVL in dollars", ["network", "project", "staked_token"])
 FARM_APR = Gauge("farm_apr_percent", "Farm APR in percent as 0-1.0", ["network", "project", "staked_token"])
 PRICE = Gauge("price", "Price of the token on a DEX", ["network", "ticker", "dex"])
-K_LAST_SQRT = Gauge("k_last_sqrt", "The square root of the kLast of an LP pair", ["network", "ticker", "dex"])
+K_GROWTH_SQRT = Gauge("k_growth_sqrt", "Tracks the sqrt(k)/lp_tokens of the pool, which allows to track the amount of fees accumulated over time", ["network", "ticker", "dex"])
 
 def update_metrics():
   if NETWORK == "bsc":
@@ -40,7 +40,8 @@ def update_metrics():
             price = priceOfUniPair(address, router_address=router)
 
             reserve1, reserve2, _timestamp = address.getReserves()
-            K_LAST_SQRT.labels(NETWORK, ticker, dex).set(math.sqrt(reserve1 * reserve2))
+            lp_tokens = address.totalSupply()
+            K_GROWTH_SQRT.labels(NETWORK, ticker, dex).set(math.sqrt(reserve1 * reserve2)/lp_tokens)
           else:
             price = priceOf(address, router_address=router)
 
