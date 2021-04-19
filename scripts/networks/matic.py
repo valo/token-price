@@ -33,8 +33,8 @@ def MASTER_CHEF_FARMS():
 
 @lru_cache()
 def STAKING_REWARDS_FARMS():
-  ETH_USDC_STAKING = interface.StakingRewards("0x3ABB60e80aCd507a89CC1C48c40DfBcc66d4197D")
-  DAI_ETH_STAKING = interface.StakingRewards("0xd9Fc7bf48FD0b4b0bd83dBA375bd3ebC42877126")
+  ETH_USDC_STAKING = interface.StakingRewards("0x4A73218eF2e820987c59F838906A82455F42D98b")
+  DAI_ETH_STAKING = interface.StakingRewards("0x785AaCd49c1Aa3ca573F2a32Bb90030A205b8147")
 
   return {
   "QuickSwap": (
