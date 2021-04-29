@@ -12,6 +12,7 @@ def TOKEN_PRICES():
 
   QUICK_ETH_USDC = interface.UniswapPair("0x853ee4b2a13f8a742d64c8f088be7ba2131f670d")
   QUICK_ETH_DAI = interface.UniswapPair("0x4a35582a710e1f4b2030a3f826da20bfb6703c09")
+  QUICK_ETH_USDT = interface.UniswapPair("0xF6422B997c7F54D1c6a6e103bcb1499EeA0a7046")
 
   return {
   "Quickswap": (
@@ -23,6 +24,7 @@ def TOKEN_PRICES():
       ("MATIC", MATIC_MATIC),
       ("ETH_USDC", QUICK_ETH_USDC),
       ("ETH_DAI", QUICK_ETH_DAI),
+      ("ETH_USDT", QUICK_ETH_USDT),
     ]
   )
 }
@@ -35,6 +37,7 @@ def MASTER_CHEF_FARMS():
 def STAKING_REWARDS_FARMS():
   ETH_USDC_STAKING = interface.StakingRewards("0x4A73218eF2e820987c59F838906A82455F42D98b")
   DAI_ETH_STAKING = interface.StakingRewards("0x785AaCd49c1Aa3ca573F2a32Bb90030A205b8147")
+  USDT_ETH_STAKING = interface.StakingRewards("0xB26bfcD52D997211C13aE4C35E82ced65AF32A02")
 
   return {
   "QuickSwap": (
@@ -42,6 +45,7 @@ def STAKING_REWARDS_FARMS():
     [
       ("ETH_USDC", ETH_USDC_STAKING),
       ("DAI_ETH", DAI_ETH_STAKING),
+      ("USDT_ETH", USDT_ETH_STAKING),
     ]
   ),
 }
