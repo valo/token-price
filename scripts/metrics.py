@@ -100,6 +100,8 @@ def update_metrics():
         print(f"Rate limited: {e}")
       else:
         print(f"HTTP Error: {e}")
+    except Exception as e:
+      print(f"Exception while updating metrics: {e}")
 
     time.sleep(int(os.environ.get('METRICS_SLEEP_SEC', 15)))
 
