@@ -24,6 +24,8 @@ def TOKEN_PRICES():
 
   UNI_FRAX_ETH = interface.UniswapPair("0xFD0A40Bc83C5faE4203DEc7e5929B446b07d1C76")
   UNI_LUSD_ETH = interface.UniswapPair("0xf20ef17b889b437c151eb5ba15a47bfc62bff469")
+  UNI_USDT_ETH = interface.UniswapPair("0x0d4a11d5eeaac28ec3f61d100daf4d40471f1852")
+  UNI_USDC_ETH = interface.UniswapPair("0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc")
 
   SUSHI_ALPHA_ibETHv2 = interface.UniswapPair("0xf79a07cd3488bbafb86df1bad09a6168d935c017")
   SUSHI_ALCX_ETH = interface.UniswapPair("0xc3f279090a47e80990fe3a9c30d24cb117ef91a8")
@@ -52,6 +54,8 @@ def TOKEN_PRICES():
       ("AAVE", AAVE),
       ("FRAX_ETH", UNI_FRAX_ETH),
       ("LUSD_ETH", UNI_LUSD_ETH),
+      ("USDT_ETH", UNI_USDT_ETH),
+      ("USDC_ETH", UNI_USDC_ETH),
     ]
   ),
   "SushiSwap": (
