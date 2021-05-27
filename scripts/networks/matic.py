@@ -2,6 +2,7 @@ from brownie import interface
 from functools import lru_cache
 
 QUICKSWAP_ROUTER = "0xa5E0829CaCEd8fFDD4De3c43696c57F7D7A678ff"
+DFYN_ROUTER = "0xA102072A4C07F06EC3B4900FDC4C7B80b6c57429"
 
 @lru_cache()
 def TOKEN_PRICES():
@@ -9,10 +10,14 @@ def TOKEN_PRICES():
   MATIC_BTC = interface.IERC20("0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6")
   MATIC_QUICK = interface.IERC20("0x831753dd7087cac61ab5644b308642cc1c33dc13")
   MATIC_MATIC = interface.IERC20("0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270")
+  MATIC_DFYN = interface.IERC20("0xc168e40227e4ebd8c1cae80f7a55a4f0e6d66c97")
 
   QUICK_ETH_USDC = interface.UniswapPair("0x853ee4b2a13f8a742d64c8f088be7ba2131f670d")
   QUICK_ETH_DAI = interface.UniswapPair("0x4a35582a710e1f4b2030a3f826da20bfb6703c09")
   QUICK_ETH_USDT = interface.UniswapPair("0xF6422B997c7F54D1c6a6e103bcb1499EeA0a7046")
+
+  DFYN_ETH_USDC = interface.UniswapPair("0x7d51bad48d253dae37cc82cad07f73849286deec")
+  DFYN_ETH_USDT = interface.UniswapPair("0x5d577d6cdc82d7b6cac7a101766b68f45bc3e34e")
 
   return {
   "Quickswap": (
@@ -25,6 +30,14 @@ def TOKEN_PRICES():
       ("ETH_USDC", QUICK_ETH_USDC),
       ("ETH_DAI", QUICK_ETH_DAI),
       ("ETH_USDT", QUICK_ETH_USDT),
+    ]
+  ),
+  "DFYN": (
+    DFYN_ROUTER,
+    [
+      ("DFYN", MATIC_DFYN),
+      ("ETH_USDC", DFYN_ETH_USDC),
+      ("ETH_USDT", DFYN_ETH_USDT),
     ]
   )
 }
