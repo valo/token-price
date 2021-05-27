@@ -30,6 +30,8 @@ def TOKEN_PRICES():
   SUSHI_ALPHA_ibETHv2 = interface.UniswapPair("0xf79a07cd3488bbafb86df1bad09a6168d935c017")
   SUSHI_ALCX_ETH = interface.UniswapPair("0xc3f279090a47e80990fe3a9c30d24cb117ef91a8")
   SUSHI_bDPI_ETH = interface.UniswapPair("0x8d782C5806607E9AAFB2AC38c1DA3838Edf8BD03")
+  SUSHI_USDC_ETH = interface.UniswapPair("0x397ff1542f962076d0bfe58ea045ffa2d347aca0")
+  SUSHI_USDT_ETH = interface.UniswapPair("0x06da0fd433c1a5d7a4faa01111c044910a184553")
 
   SUSHI_ALCX = interface.IERC20("0xdbdb4d16eda451d0503b854cf79d55697f90c8df")
   SUSHI_ANY = interface.IERC20("0xf99d58e463a2e07e5692127302c20a191861b4d6")
@@ -66,6 +68,8 @@ def TOKEN_PRICES():
       ("ANY", SUSHI_ANY),
       ("ALCX_ETH", SUSHI_ALCX_ETH),
       ("bDPI_ETH", SUSHI_bDPI_ETH),
+      ("USDC_ETH", SUSHI_USDC_ETH),
+      ("USDT_ETH", SUSHI_USDT_ETH),
     ]
   ),
 }
