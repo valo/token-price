@@ -102,6 +102,7 @@ def update_metrics():
         print(f"HTTP Error: {e}")
     except Exception as e:
       print(f"Exception while updating metrics: {e}")
+      traceback.print_exc()
 
     time.sleep(int(os.environ.get('METRICS_SLEEP_SEC', 15)))
 

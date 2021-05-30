@@ -21,6 +21,7 @@ def TOKEN_PRICES():
   UWL = interface.IERC20("0xdbdd6f355a37b94e6c7d32fef548e98a280b8df5")
   COMP = interface.IERC20("0xc00e94cb662c3520282e6f5717214004a7f26888")
   LRC = interface.IERC20("0xbbbbca6a901c926f240b89eacb641d8aec7aeafd")
+  LQTY = interface.IERC20("0x6dea81c8171d0ba574754ef6f8b412f2ed88c54d")
 
   UNI_FRAX_ETH = interface.UniswapPair("0xFD0A40Bc83C5faE4203DEc7e5929B446b07d1C76")
   UNI_LUSD_ETH = interface.UniswapPair("0xf20ef17b889b437c151eb5ba15a47bfc62bff469")
@@ -54,6 +55,7 @@ def TOKEN_PRICES():
       ("COMP", COMP),
       ("LRC", LRC),
       ("AAVE", AAVE),
+      ("LQTY", LQTY),
       ("FRAX_ETH", UNI_FRAX_ETH),
       ("LUSD_ETH", UNI_LUSD_ETH),
       ("USDT_ETH", UNI_USDT_ETH),
