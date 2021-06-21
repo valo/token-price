@@ -4,6 +4,7 @@ from functools import lru_cache
 QUICKSWAP_ROUTER = "0xa5E0829CaCEd8fFDD4De3c43696c57F7D7A678ff"
 DFYN_ROUTER = "0xA102072A4C07F06EC3B4900FDC4C7B80b6c57429"
 SUSHI_ROUTER = "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506"
+POLYDEX_ROUTER = "0xe5C67Ba380FB2F70A47b489e94BCeD486bb8fB74"
 
 SUSHI_ETH_USDC = interface.UniswapPair("0x34965ba0ac2451a34a0471f04cca3f990b8dea27")
 SUSHI_ETH_DAI = interface.UniswapPair("0x6ff62bfb8c12109e8000935a6de54dad83a4f39f")
@@ -24,6 +25,9 @@ def TOKEN_PRICES():
 
   DFYN_ETH_USDC = interface.UniswapPair("0x7d51bad48d253dae37cc82cad07f73849286deec")
   DFYN_ETH_USDT = interface.UniswapPair("0x5d577d6cdc82d7b6cac7a101766b68f45bc3e34e")
+
+  POLYDEX_ETH_USDC = interface.UniswapPair("0xe9ac3649075cf4f2241e759db527e2c5fa98ed97")
+  POLYDEX_ETH_USDT = interface.UniswapPair("0x070e37bdc2318983f4acc11ec8866c8cc5b2818a")
 
   return {
   "Sushi-Polygon": (
@@ -54,12 +58,38 @@ def TOKEN_PRICES():
       ("ETH_USDC", DFYN_ETH_USDC),
       ("ETH_USDT", DFYN_ETH_USDT),
     ]
+  ),
+  "PolyDEX": (
+    POLYDEX_ROUTER,
+    [
+      ("ETH_USDC", POLYDEX_ETH_USDC),
+      ("ETH_USDT", POLYDEX_ETH_USDT),
+    ]
   )
 }
 
 @lru_cache()
 def MASTER_CHEF_FARMS():
   return {}
+
+@lru_cache()
+def MASTER_CHEF_FARMS_V2():
+  SUSHI_MASTER_CHEF = interface.MiniChefV2("0x0769fd68dFb93167989C6f7254cd0D766Fb2841F")
+
+  return {
+    "Sushi-Polygon": (
+      SUSHI_MASTER_CHEF,
+      "SUSHI",
+      "sushiPerSecond",
+      SUSHI_ROUTER,
+      [
+        ("ETH_USDC", SUSHI_ETH_USDC),
+        ("ETH_DAI", SUSHI_ETH_DAI),
+        ("ETH_USDT", SUSHI_ETH_USDT),
+        ("FRAX_USDC", SUSHI_FRAX_USDC),
+      ]
+    ),
+  }
 
 @lru_cache()
 def STAKING_REWARDS_FARMS():
