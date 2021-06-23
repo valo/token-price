@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 import sys
 import os
-from brownie import project, network, Contract
+from brownie import project, network
 p = project.load()
 network.connect(os.environ.get('NETWORK', 'ethereum'))
 sys.modules["brownie"].interface = p.interface
