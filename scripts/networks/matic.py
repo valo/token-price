@@ -11,6 +11,7 @@ SUSHI_ETH_USDC = interface.UniswapPair("0x34965ba0ac2451a34a0471f04cca3f990b8dea
 SUSHI_ETH_DAI = interface.UniswapPair("0x6ff62bfb8c12109e8000935a6de54dad83a4f39f")
 SUSHI_ETH_USDT = interface.UniswapPair("0xc2755915a85c6f6c1c0f3a86ac8c058f11caa9c9")
 SUSHI_FRAX_USDC = interface.UniswapPair("0x9e20a8d3501bf96eda8e69b96dd84840058a1cb0")
+SUSHI_ETH_wBTC = interface.UniswapPair("0xe62ec2e799305e0d367b0cc3ee2cda135bf89816")
 
 @lru_cache()
 def TOKEN_PRICES():
@@ -41,6 +42,7 @@ def TOKEN_PRICES():
       ("ETH_DAI", SUSHI_ETH_DAI),
       ("ETH_USDT", SUSHI_ETH_USDT),
       ("FRAX_USDC", SUSHI_FRAX_USDC),
+      ("ETH_wBTC", SUSHI_ETH_wBTC),
     ]
   ),
   "Quickswap": (
