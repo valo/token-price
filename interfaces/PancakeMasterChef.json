@@ -2,13 +2,23 @@
   {
     "inputs": [
       {
-        "internalType": "contract OatToken",
-        "name": "_oat",
+        "internalType": "contract CakeToken",
+        "name": "_cake",
+        "type": "address"
+      },
+      {
+        "internalType": "contract SyrupBar",
+        "name": "_syrup",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_devaddr",
         "type": "address"
       },
       {
         "internalType": "uint256",
-        "name": "_oatPerBlock",
+        "name": "_cakePerBlock",
         "type": "uint256"
       },
       {
@@ -140,11 +150,6 @@
         "type": "address"
       },
       {
-        "internalType": "uint16",
-        "name": "_depositFeeBPS",
-        "type": "uint16"
-      },
-      {
         "internalType": "bool",
         "name": "_withUpdate",
         "type": "bool"
@@ -153,6 +158,32 @@
     "name": "add",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "cake",
+    "outputs": [
+      {
+        "internalType": "contract CakeToken",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "cakePerBlock",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -174,8 +205,21 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_devaddr",
+        "type": "address"
+      }
+    ],
+    "name": "dev",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
-    "name": "devAddress",
+    "name": "devaddr",
     "outputs": [
       {
         "internalType": "address",
@@ -200,16 +244,16 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "feeAddress",
-    "outputs": [
+    "inputs": [
       {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
       }
     ],
-    "stateMutability": "view",
+    "name": "enterStaking",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -237,6 +281,19 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "leaveStaking",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "massUpdatePools",
     "outputs": [],
@@ -244,26 +301,26 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "oat",
-    "outputs": [
+    "inputs": [
       {
-        "internalType": "contract OatToken",
-        "name": "",
-        "type": "address"
+        "internalType": "uint256",
+        "name": "_pid",
+        "type": "uint256"
       }
     ],
-    "stateMutability": "view",
+    "name": "migrate",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [],
-    "name": "oatPerBlock",
+    "name": "migrator",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "contract IMigratorChef",
         "name": "",
-        "type": "uint256"
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -295,7 +352,7 @@
         "type": "address"
       }
     ],
-    "name": "pendingOat",
+    "name": "pendingCake",
     "outputs": [
       {
         "internalType": "uint256",
@@ -333,13 +390,8 @@
       },
       {
         "internalType": "uint256",
-        "name": "accOatPerShare",
+        "name": "accCakePerShare",
         "type": "uint256"
-      },
-      {
-        "internalType": "uint16",
-        "name": "depositFeeBPS",
-        "type": "uint16"
       }
     ],
     "stateMutability": "view",
@@ -378,11 +430,6 @@
         "type": "uint256"
       },
       {
-        "internalType": "uint16",
-        "name": "_depositFeeBPS",
-        "type": "uint16"
-      },
-      {
         "internalType": "bool",
         "name": "_withUpdate",
         "type": "bool"
@@ -396,25 +443,12 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "_devAddress",
+        "internalType": "contract IMigratorChef",
+        "name": "_migrator",
         "type": "address"
       }
     ],
-    "name": "setDevAddress",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_feeAddress",
-        "type": "address"
-      }
-    ],
-    "name": "setFeeAddress",
+    "name": "setMigrator",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -427,6 +461,19 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "syrup",
+    "outputs": [
+      {
+        "internalType": "contract SyrupBar",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -454,19 +501,6 @@
       }
     ],
     "name": "transferOwnership",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_oatPerBlock",
-        "type": "uint256"
-      }
-    ],
-    "name": "updateEmissionRate",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
