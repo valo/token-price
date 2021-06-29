@@ -22,6 +22,7 @@ def TOKEN_PRICES():
   COMP = interface.IERC20("0xc00e94cb662c3520282e6f5717214004a7f26888")
   LRC = interface.IERC20("0xbbbbca6a901c926f240b89eacb641d8aec7aeafd")
   LQTY = interface.IERC20("0x6dea81c8171d0ba574754ef6f8b412f2ed88c54d")
+  LUSD = interface.IERC20("0x5f98805a4e8be255a32880fdec7f6728c6568ba0")
 
   UNI_FRAX_ETH = interface.UniswapPair("0xFD0A40Bc83C5faE4203DEc7e5929B446b07d1C76")
   UNI_LUSD_ETH = interface.UniswapPair("0xf20ef17b889b437c151eb5ba15a47bfc62bff469")
@@ -37,6 +38,9 @@ def TOKEN_PRICES():
   SUSHI_ALCX = interface.IERC20("0xdbdb4d16eda451d0503b854cf79d55697f90c8df")
   SUSHI_ANY = interface.IERC20("0xf99d58e463a2e07e5692127302c20a191861b4d6")
 
+  CRV_TRICRYPTO = interface.CurveLPToken("0xca3d75ac011bf5ad07a98d02f18225f9bd9a6bdf")
+  yvCRV_TRICRYPTO = interface.yEarnVault("0x3d980e50508cfd41a13837a60149927a11c03731")
+
   return {
   "Uniswap": (
     UNISWAP_ROUTER,
@@ -51,6 +55,7 @@ def TOKEN_PRICES():
       ("USDC", USDC),
       ("USDT", USDT),
       ("BUSD", BUSD),
+      ("LUSD", LUSD),
       ("UWL", UWL),
       ("COMP", COMP),
       ("LRC", LRC),
@@ -60,6 +65,8 @@ def TOKEN_PRICES():
       ("LUSD_ETH", UNI_LUSD_ETH),
       ("USDT_ETH", UNI_USDT_ETH),
       ("USDC_ETH", UNI_USDC_ETH),
+      ("crvTricrypto", CRV_TRICRYPTO),
+      ("yvCurve-triCrypto", yvCRV_TRICRYPTO),
     ]
   ),
   "SushiSwap": (

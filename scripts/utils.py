@@ -129,10 +129,8 @@ def priceOf1InchPair(oneinch_pair: interface.IMooniswap, router_address: str):
 
 def priceOfCurveLPToken(lp_token: interface.CurveLPToken, router_address: str):
   minter = interface.CurveLPMinter(lp_token.minter())
-  print(minter)
 
   total_supply = lp_token.totalSupply() / 10 ** 18
-  print(total_supply)
 
   total_dollars_locked = 0
   for i in range(5):

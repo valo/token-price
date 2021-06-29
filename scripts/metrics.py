@@ -7,7 +7,7 @@ from prometheus_client import Gauge
 from requests.exceptions import HTTPError
 from . import master_chef
 from . import staking_rewards
-from .utils import priceOf, priceOfUniPair
+from .utils import priceOf, priceOfUniPair, priceOfCurveLPToken
 
 NETWORK = os.environ.get("NETWORK", "ethereum")
 
@@ -42,6 +42,10 @@ def update_metrics():
             reserve1, reserve2, _timestamp = address.getReserves()
             lp_tokens = address.totalSupply()
             K_GROWTH_SQRT.labels(NETWORK, ticker, dex).set(math.sqrt(reserve1 * reserve2)/lp_tokens)
+          elif address._name == "CurveLPToken":
+            price = priceOfCurveLPToken(address, router_address=router)
+          elif address._name == "yEarnVault":
+            price = address.pricePerShare() / 10 ** 18
           else:
             price = priceOf(address, router_address=router)
 
