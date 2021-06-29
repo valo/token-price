@@ -126,3 +126,20 @@ def priceOf1InchPair(oneinch_pair: interface.IMooniswap, router_address: str):
   total_pool = token0Reserves * token0Price / 10 ** token0.decimals() + token1Reserves * token1Price / 10 ** token1.decimals()
 
   return total_pool / oneinch_pair.totalSupply() * 10 ** oneinch_pair.decimals()
+
+def priceOfCurveLPToken(lp_token: interface.CurveLPToken, router_address: str):
+  minter = interface.CurveLPMinter(lp_token.minter())
+  print(minter)
+
+  total_supply = lp_token.totalSupply() / 10 ** 18
+  print(total_supply)
+
+  total_dollars_locked = 0
+  for i in range(5):
+    try:
+      coin = interface.ERC20(minter.coins(i))
+      total_dollars_locked += priceOf(coin, router_address) * minter.balances(i) / 10 ** coin.decimals()
+    except ValueError:
+      break
+
+  return total_dollars_locked / total_supply

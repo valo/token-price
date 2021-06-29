@@ -14,7 +14,7 @@ p = project.load()
 network.connect(os.environ.get('NETWORK', 'ethereum'))
 sys.modules["brownie"].interface = p.interface
 
-from scripts.utils import priceOf, priceOf1InchPair, priceOfUniPair
+from scripts.utils import priceOf, priceOf1InchPair, priceOfUniPair, priceOfCurveLPToken
 from scripts.the_graph import pairStats
 
 @app.route('/token_price/<address>')
@@ -35,6 +35,19 @@ def uniswap_pair_price(address):
 def oneinch_pair_price(address):
     return str(priceOf1InchPair(
         p.interface.IMooniswap(address),
+        router_address=request.args.get("router", "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D")
+    ))
+
+@app.route('/yearn_vault_price/<address>')
+def yearn_vault_price(address):
+    yearn_vault = p.interface.yEarnVault(address)
+    return str(yearn_vault.pricePerShare() / 10 ** 18)
+
+@app.route('/curve_lp_price/<address>')
+def curve_lp_price(address):
+    lp_token = p.interface.CurveLPToken(address)
+    return str(priceOfCurveLPToken(
+        lp_token,
         router_address=request.args.get("router", "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D")
     ))
 
