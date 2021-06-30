@@ -3,40 +3,41 @@ from brownie import interface
 from brownie.exceptions import ContractNotFound
 from datetime import datetime, timedelta
 from functools import lru_cache
+from typing import List
 
 @lru_cache
-def DAI():
+def DAI() -> interface.IERC20:
   return interface.IERC20(os.environ.get('DAI_ADDRESS', "0x6b175474e89094c44da98b954eedeac495271d0f"))
 
 @lru_cache
-def WETH():
+def WETH() -> interface.IERC20:
   return interface.IERC20(os.environ.get('WETH_ADDRESS', "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"))
 
 @lru_cache
-def USDT():
+def USDT() -> interface.IERC20:
   return interface.IERC20(os.environ.get('USDT_ADDRESS', "0xdac17f958d2ee523a2206206994597c13d831ec7"))
 
 @lru_cache
-def USDC():
+def USDC() -> interface.IERC20:
   return interface.IERC20(os.environ.get('USDC_ADDRESS', "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"))
 
 @lru_cache
-def getFactory(router):
+def getFactory(router) -> interface.UniswapFactoryV2:
   return interface.UniswapFactoryV2(router.factory())
 
 @lru_cache
-def getToken0(pair):
+def getToken0(pair) -> interface.IERC20:
   return interface.IERC20(pair.token0())
 
 @lru_cache
-def getToken1(pair):
+def getToken1(pair) -> interface.IERC20:
   return interface.IERC20(pair.token1())
 
 @lru_cache
-def getPair(factory, token0, token1):
+def getPair(factory, token0, token1) -> interface.UniswapPair:
   return interface.UniswapPair(factory.getPair(token0, token1))
 
-def getReserves(token, otherToken, factory):
+def getReserves(token, otherToken, factory) -> float:
   try:
     pair = getPair(factory, token, otherToken)
   except ContractNotFound:
@@ -49,7 +50,7 @@ def getReserves(token, otherToken, factory):
   else:
     return token1Reserves / 10**(token.decimals())
 
-def getUSDCPath(token: interface.IERC20, router: interface.UniswapRouterV2):
+def getUSDCPath(token: interface.IERC20, router: interface.UniswapRouterV2) -> List[interface.IERC20]:
   factory = getFactory(router)
   if token != WETH():
     reservesInWETH = getReserves(WETH(), token, factory) * priceOf(WETH(), router)
@@ -73,7 +74,7 @@ def getUSDCPath(token: interface.IERC20, router: interface.UniswapRouterV2):
 
   return [token, USDC()]
 
-def priceOf(token: interface.IERC20, router_address: str):
+def priceOf(token: interface.IERC20, router_address: str) -> float:
   if token == USDC() or token == USDT():
     return 1.0
 
@@ -81,7 +82,7 @@ def priceOf(token: interface.IERC20, router_address: str):
   path = getUSDCPath(token, router)
   return router.getAmountsOut(10 ** token.decimals() / 100, path)[-1] / 10 ** path[-1].decimals() * 100
 
-def priceOfUniPair(uni_pair: interface.UniswapPair, router_address: str):
+def priceOfUniPair(uni_pair: interface.UniswapPair, router_address: str) -> float:
   (token0Reserves, token1Reserves, _) = uni_pair.getReserves()
 
   try:
@@ -102,7 +103,7 @@ def priceOfUniPair(uni_pair: interface.UniswapPair, router_address: str):
 
   return total_pool / uni_pair.totalSupply() * 10 ** uni_pair.decimals()
 
-def priceOf1InchPair(oneinch_pair: interface.IMooniswap, router_address: str):
+def priceOf1InchPair(oneinch_pair: interface.IMooniswap, router_address: str) -> float:
   (token0, token1) = oneinch_pair.getTokens()
 
   if token0 == "0x0000000000000000000000000000000000000000":
@@ -127,7 +128,7 @@ def priceOf1InchPair(oneinch_pair: interface.IMooniswap, router_address: str):
 
   return total_pool / oneinch_pair.totalSupply() * 10 ** oneinch_pair.decimals()
 
-def priceOfCurveLPToken(lp_token: interface.CurveLPToken, router_address: str):
+def priceOfCurveLPToken(lp_token: interface.CurveLPToken, router_address: str) -> float:
   minter = interface.CurveLPMinter(lp_token.minter())
 
   total_supply = lp_token.totalSupply() / 10 ** 18
@@ -141,3 +142,21 @@ def priceOfCurveLPToken(lp_token: interface.CurveLPToken, router_address: str):
       break
 
   return total_dollars_locked / total_supply
+
+def homoraV2PositionSize(pos_id: int, bank_address: str, router_address: str) -> float:
+  bank = interface.HomoraBank(bank_address)
+
+  (_owner, coll_token, coll_id, coll_size) = bank.getPositionInfo(pos_id)
+  coll = interface.WMasterChef(coll_token)
+
+  underlying_lp_token = interface.UniswapPair(coll.getUnderlyingToken(coll_id))
+  position_size = priceOfUniPair(underlying_lp_token, router_address) * coll_size / 10 ** underlying_lp_token.decimals()
+
+  debts = bank.getPositionDebts(pos_id)
+  total_debt = 0
+
+  for (debt_token, debt_size) in zip(*debts):
+    debt_token = interface.ERC20(debt_token)
+    total_debt += priceOf(debt_token, router_address) * debt_size / 10 ** debt_token.decimals()
+
+  return position_size - total_debt
