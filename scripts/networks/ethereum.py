@@ -39,7 +39,7 @@ def TOKEN_PRICES():
   SUSHI_ANY = interface.IERC20("0xf99d58e463a2e07e5692127302c20a191861b4d6")
 
   CRV_TRICRYPTO = interface.CurveLPToken("0xca3d75ac011bf5ad07a98d02f18225f9bd9a6bdf")
-  CRV_TRICRYPTO2 = interface.CurveLPToken("0x3993d34e7e99Abf6B6f367309975d1360222D446")
+  CRV_TRICRYPTO2 = interface.CurveLPToken("0xc4AD29ba4B3c580e6D59105FFf484999997675Ff")
   yvCRV_TRICRYPTO = interface.yEarnVault("0x3d980e50508cfd41a13837a60149927a11c03731")
 
   return {
@@ -86,26 +86,7 @@ def TOKEN_PRICES():
 }
 
 def MASTER_CHEF_FARMS():
-  BDP_MASTER_CHEF = interface.BDPMaster("0x0De845955E2bF089012F682fE9bC81dD5f11B372")
-
-  return {
-    "BigDataProtocol": (
-      BDP_MASTER_CHEF,
-      "BDP",
-      "REWARD_PER_BLOCK",
-      UNISWAP_ROUTER,
-      [
-        ("USDT", USDT),
-        ("USDC", USDC),
-        ("ETH", ETH),
-        ("BTC", BTC),
-        ("YFI", YFI),
-        ("UNI", UNI),
-        ("AAVE", AAVE),
-        ("SUSHI", SUSHI),
-      ]
-    ),
-  }
+  return {}
 
 def STAKING_REWARDS_FARMS():
   return {}
