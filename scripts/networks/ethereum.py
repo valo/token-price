@@ -39,6 +39,7 @@ def TOKEN_PRICES():
   SUSHI_ANY = interface.IERC20("0xf99d58e463a2e07e5692127302c20a191861b4d6")
 
   CRV_TRICRYPTO = interface.CurveLPToken("0xca3d75ac011bf5ad07a98d02f18225f9bd9a6bdf")
+  CRV_TRICRYPTO2 = interface.CurveLPToken("0x3993d34e7e99Abf6B6f367309975d1360222D446")
   yvCRV_TRICRYPTO = interface.yEarnVault("0x3d980e50508cfd41a13837a60149927a11c03731")
 
   return {
@@ -66,6 +67,7 @@ def TOKEN_PRICES():
       ("USDT_ETH", UNI_USDT_ETH),
       ("USDC_ETH", UNI_USDC_ETH),
       ("crvTricrypto", CRV_TRICRYPTO),
+      ("crvTricrypto2", CRV_TRICRYPTO2),
       ("yvCurve-triCrypto", yvCRV_TRICRYPTO),
     ]
   ),
