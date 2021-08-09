@@ -45,7 +45,7 @@ def update_metrics():
           elif address._name == "CurveLPToken":
             price = priceOfCurveLPToken(address, router_address=router)
           elif address._name == "yEarnVault":
-            price = address.pricePerShare() / 10 ** 18
+            price = address.pricePerShare() / 10 ** address.decimals()
           else:
             price = priceOf(address, router_address=router)
 
