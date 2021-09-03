@@ -23,6 +23,7 @@ def TOKEN_PRICES():
   LRC = interface.IERC20("0xbbbbca6a901c926f240b89eacb641d8aec7aeafd")
   LQTY = interface.IERC20("0x6dea81c8171d0ba574754ef6f8b412f2ed88c54d")
   LUSD = interface.IERC20("0x5f98805a4e8be255a32880fdec7f6728c6568ba0")
+  DOG = interface.IERC20("0xbaac2b4491727d78d2b78815144570b9f2fe8899")
 
   UNI_FRAX_ETH = interface.UniswapPair("0xFD0A40Bc83C5faE4203DEc7e5929B446b07d1C76")
   UNI_LUSD_ETH = interface.UniswapPair("0xf20ef17b889b437c151eb5ba15a47bfc62bff469")
@@ -79,6 +80,7 @@ def TOKEN_PRICES():
       ("ALPHA_ibETHv2", SUSHI_ALPHA_ibETHv2),
       ("ALCX", SUSHI_ALCX),
       ("ANY", SUSHI_ANY),
+      ("DOG", DOG),
       ("ALCX_ETH", SUSHI_ALCX_ETH),
       ("bDPI_ETH", SUSHI_bDPI_ETH),
       ("USDC_ETH", SUSHI_USDC_ETH),
