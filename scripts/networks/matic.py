@@ -34,7 +34,9 @@ def TOKEN_PRICES():
   WAULT_ETH_wBTC = interface.UniswapPair("0x30AdBCAb9Fbb4436109fcf3058D1Af27E6E33F3F")
   WAULT_ETH_USDC = interface.UniswapPair("0xd928Ce1d0F2642e44615768761C0F00c23E0d588")
 
-  tVaultUSDC = interface.yEarnVault("0xF135AF4294A1ca7aD7de0260033418DE2Cf20696")
+  tVaultUSDC = interface.yEarnVault("0xEB02e1024cC16bCD28adE5A87D46257dc307E18C")
+  tVaultDAI = interface.yEarnVault("0xf5e364b9c07222cdec7d371c1422625593966c54")
+  tVaultUSDT = interface.yEarnVault("0x0904420F7F9eE33800a67B5CCa4Ee8087434Bcc2")
 
   return {
   "Sushi-Polygon": (
@@ -58,6 +60,8 @@ def TOKEN_PRICES():
       ("ETH_DAI", QUICK_ETH_DAI),
       ("ETH_USDT", QUICK_ETH_USDT),
       ("tvUSDC", tVaultUSDC),
+      ("tvDAI", tVaultDAI),
+      ("tvUSDT", tVaultUSDT),
     ]
   ),
   "DFYN": (
