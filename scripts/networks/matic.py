@@ -37,6 +37,8 @@ def TOKEN_PRICES():
   tVaultUSDC = interface.yEarnVault("0xEB02e1024cC16bCD28adE5A87D46257dc307E18C")
   tVaultDAI = interface.yEarnVault("0xf5e364b9c07222cdec7d371c1422625593966c54")
   tVaultUSDT = interface.yEarnVault("0x0904420F7F9eE33800a67B5CCa4Ee8087434Bcc2")
+  tVaultBTC = interface.yEarnVault("0x7Cd28e21a89325EB5b2395591E86374522396E77")
+  tVaultETH = interface.yEarnVault("0xDF53c53E553524d13Fea7a4170856eb8b9C8a6EF")
 
   return {
   "Sushi-Polygon": (
@@ -62,6 +64,8 @@ def TOKEN_PRICES():
       ("tvUSDC", tVaultUSDC),
       ("tvDAI", tVaultDAI),
       ("tvUSDT", tVaultUSDT),
+      ("tvBTC", tVaultBTC),
+      ("tvETH", tVaultETH),
     ]
   ),
   "DFYN": (
