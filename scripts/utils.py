@@ -85,21 +85,13 @@ def priceOf(token: interface.IERC20, router_address: str) -> float:
 def priceOfUniPair(uni_pair: interface.UniswapPair, router_address: str) -> float:
   (token0Reserves, token1Reserves, _) = uni_pair.getReserves()
 
-  try:
-    token0 = getToken0(uni_pair)
-    token0Price = priceOf(token0, router_address)
-
-    total_pool = 2 * token0Reserves * token0Price / 10 ** token0.decimals()
-
-    return total_pool / uni_pair.totalSupply() * 10 ** uni_pair.decimals()
-  except ValueError:
-    pass
+  token0 = getToken0(uni_pair)
+  token0Price = priceOf(token0, router_address)
 
   token1 = getToken1(uni_pair)
-
   token1Price = priceOf(token1, router_address)
 
-  total_pool = 2 * token1Reserves * token1Price / 10 ** token1.decimals()
+  total_pool = token0Reserves * token0Price / 10 ** token0.decimals() + token1Reserves * token1Price / 10 ** token1.decimals()
 
   return total_pool / uni_pair.totalSupply() * 10 ** uni_pair.decimals()
 
