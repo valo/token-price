@@ -14,7 +14,7 @@ def TOKEN_PRICES():
   SUSHI_USDT_ETH = interface.UniswapPair("0xcb0e5bfa72bbb4d16ab5aa0c60601c438f04b4ad")
 
   return {
-  "SushiSwap": (
+  "Sushi-Arbitrum": (
     SUSHISWAP_ROUTER,
     [
       ("ETH", ETH),
