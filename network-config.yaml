@@ -25,6 +25,12 @@ live:
         host: https://http-mainnet.hecochain.com
         id: heco
         name: heco
+  - name: Arbitrum
+    networks:
+      - chainid: 42161
+        host: https://arb1.arbitrum.io/rpc
+        id: arbitrum
+        name: arbitrum
 development:
   - cmd: ganache-cli
     cmd_settings:

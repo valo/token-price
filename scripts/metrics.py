@@ -29,6 +29,9 @@ def update_metrics():
   elif NETWORK == "heco":
     from .networks.heco import MASTER_CHEF_FARMS, TOKEN_PRICES, STAKING_REWARDS_FARMS
     BLOCK_TIME = 3
+  elif NETWORK == "arbitrum":
+    from .networks.arbitrum import MASTER_CHEF_FARMS, TOKEN_PRICES, STAKING_REWARDS_FARMS
+    BLOCK_TIME = 1
 
   def update_prices():
     for dex in TOKEN_PRICES():
