@@ -135,6 +135,19 @@ def priceOfCurveLPToken(lp_token: interface.CurveLPToken, router_address: str) -
 
   return total_dollars_locked / total_supply
 
+def priceOfCurvePool(lp_token: interface.CurvePool, router_address: str) -> float:
+  total_supply = lp_token.totalSupply() / 10 ** 18
+
+  total_dollars_locked = 0
+  for i in range(5):
+    try:
+      coin = interface.ERC20(lp_token.coins(i))
+      total_dollars_locked += priceOf(coin, router_address) * lp_token.balances(i) / 10 ** coin.decimals()
+    except ValueError:
+      break
+
+  return total_dollars_locked / total_supply
+
 def homoraV2PositionSize(pos_id: int, bank_address: str, router_address: str) -> float:
   bank = interface.HomoraBank(bank_address)
 

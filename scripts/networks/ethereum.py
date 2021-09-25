@@ -30,7 +30,6 @@ def TOKEN_PRICES():
   UNI_USDT_ETH = interface.UniswapPair("0x0d4a11d5eeaac28ec3f61d100daf4d40471f1852")
   UNI_USDC_ETH = interface.UniswapPair("0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc")
 
-  SUSHI_ALPHA_ibETHv2 = interface.UniswapPair("0xf79a07cd3488bbafb86df1bad09a6168d935c017")
   SUSHI_ALCX_ETH = interface.UniswapPair("0xc3f279090a47e80990fe3a9c30d24cb117ef91a8")
   SUSHI_bDPI_ETH = interface.UniswapPair("0x8d782C5806607E9AAFB2AC38c1DA3838Edf8BD03")
   SUSHI_USDC_ETH = interface.UniswapPair("0x397ff1542f962076d0bfe58ea045ffa2d347aca0")
@@ -41,7 +40,7 @@ def TOKEN_PRICES():
 
   CRV_TRICRYPTO = interface.CurveLPToken("0xca3d75ac011bf5ad07a98d02f18225f9bd9a6bdf")
   CRV_TRICRYPTO2 = interface.CurveLPToken("0xc4AD29ba4B3c580e6D59105FFf484999997675Ff")
-  CRV_MIM = interface.CurveLPToken("0x5a6a4d54456819380173272a5e8e9b9904bdf41b")
+  CRV_MIM = interface.CurvePool("0x5a6a4d54456819380173272a5e8e9b9904bdf41b")
   yvCRV_TRICRYPTO = interface.yEarnVault("0x3d980e50508cfd41a13837a60149927a11c03731")
   yvCRV_TRICRYPTO2 = interface.yEarnVault("0xE537B5cc158EB71037D4125BDD7538421981E6AA")
   yvCRV_MIM = interface.yEarnVault("0x2dfb14e32e2f8156ec15a2c21c3a6c053af52be8")
@@ -81,7 +80,6 @@ def TOKEN_PRICES():
   "SushiSwap": (
     SUSHISWAP_ROUTER,
     [
-      ("ALPHA_ibETHv2", SUSHI_ALPHA_ibETHv2),
       ("ALCX", SUSHI_ALCX),
       ("ANY", SUSHI_ANY),
       ("DOG", DOG),
