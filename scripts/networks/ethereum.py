@@ -73,7 +73,7 @@ def TOKEN_PRICES():
       ("crvTricrypto", CRV_TRICRYPTO),
       ("crvTricrypto2", CRV_TRICRYPTO2),
       ("crvMIM", CRV_MIM),
-      ("yvCurve-MIM", yvCRV_MIM)
+      ("yvCurve-MIM", yvCRV_MIM),
       ("yvCurve-triCrypto", yvCRV_TRICRYPTO),
       ("yvCurve-triCrypto2", yvCRV_TRICRYPTO2),
     ]
