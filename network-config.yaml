@@ -31,6 +31,12 @@ live:
         host: https://arb1.arbitrum.io/rpc
         id: arbitrum
         name: arbitrum
+  - name: Avalanche
+    networks:
+      - chainid: 43114
+        host: https://api.avax.network/ext/bc/C/rpc
+        id: avalanche
+        name: avalanche
 development:
   - cmd: ganache-cli
     cmd_settings:
