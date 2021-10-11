@@ -3,6 +3,7 @@ import time
 import os
 import traceback
 import math
+from brownie import interface
 from prometheus_client import Gauge
 from requests.exceptions import HTTPError
 from . import master_chef
@@ -12,6 +13,7 @@ from .utils import priceOf, priceOfUniPair, priceOfCurveLPToken, priceOfCurvePoo
 NETWORK = os.environ.get("NETWORK", "ethereum")
 
 FARM_TVL = Gauge("farm_tvl_dollars", "Farm TVL in dollars", ["network", "project", "staked_token"])
+TVL = Gauge("tvl_dollars", "TVL in dollars", ["network", "project"])
 FARM_APR = Gauge("farm_apr_percent", "Farm APR in percent as 0-1.0", ["network", "project", "staked_token"])
 PRICE = Gauge("price", "Price of the token on a DEX", ["network", "ticker", "dex"])
 K_GROWTH_SQRT = Gauge("k_growth_sqrt", "Tracks the sqrt(k)/lp_tokens of the pool, which allows to track the amount of fees accumulated over time", ["network", "ticker", "dex"])
@@ -54,6 +56,11 @@ def update_metrics():
             price = priceOfCurvePool(address, router_address=router)
           elif address._name == "yEarnVault":
             price = address.pricePerShare() / 10 ** address.decimals()
+
+            underlying_token = interface.IERC20(address.token())
+            underlying_price = priceOf(underlying_token, router_address=router)
+            total_assets = address.totalAssets() / 10**underlying_token.decimals()
+            TVL.labels(NETWORK, ticker).set(total_assets * underlying_price)
           else:
             price = priceOf(address, router_address=router)
 
