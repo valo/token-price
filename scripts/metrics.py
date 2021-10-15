@@ -18,6 +18,9 @@ FARM_APR = Gauge("farm_apr_percent", "Farm APR in percent as 0-1.0", ["network",
 PRICE = Gauge("price", "Price of the token on a DEX", ["network", "ticker", "dex"])
 K_GROWTH_SQRT = Gauge("k_growth_sqrt", "Tracks the sqrt(k)/lp_tokens of the pool, which allows to track the amount of fees accumulated over time", ["network", "ticker", "dex"])
 
+VAULT_UTILIZATION = Gauge("utilization_percent", "The percent of the utilized assets by a vault", ["network", "ticker"])
+
+
 def update_metrics():
   if NETWORK == "bsc":
     from .networks.bsc import MASTER_CHEF_FARMS, TOKEN_PRICES, STAKING_REWARDS_FARMS
@@ -59,8 +62,11 @@ def update_metrics():
 
             underlying_token = interface.IERC20(address.token())
             underlying_price = priceOf(underlying_token, router_address=router)
-            total_assets = address.totalAssets() / 10**underlying_token.decimals()
+            decimals = underlying_token.decimals()
+            total_assets = address.totalAssets() / 10**decimals
+            total_debt = address.totalDebt() / 10**decimals
             TVL.labels(NETWORK, ticker).set(total_assets * underlying_price)
+            VAULT_UTILIZATION.labels(NETWORK, ticker).set(total_debt / total_assets)
           else:
             price = priceOf(address, router_address=router)
 
