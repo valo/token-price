@@ -19,6 +19,7 @@ PRICE = Gauge("price", "Price of the token on a DEX", ["network", "ticker", "dex
 K_GROWTH_SQRT = Gauge("k_growth_sqrt", "Tracks the sqrt(k)/lp_tokens of the pool, which allows to track the amount of fees accumulated over time", ["network", "ticker", "dex"])
 
 VAULT_UTILIZATION = Gauge("utilization_percent", "The percent of the utilized assets by a vault", ["network", "ticker"])
+VAULT_LAST_REPORT = Gauge("last_report", "The timestamp of the last report of a vault", ["network", "ticker"])
 
 
 def update_metrics():
@@ -67,6 +68,7 @@ def update_metrics():
             total_debt = address.totalDebt() / 10**decimals
             TVL.labels(NETWORK, ticker).set(total_assets * underlying_price)
             VAULT_UTILIZATION.labels(NETWORK, ticker).set(total_debt / total_assets)
+            VAULT_LAST_REPORT.labels(NETWORK, ticker).set(address.lastReport())
           else:
             price = priceOf(address, router_address=router)
 
