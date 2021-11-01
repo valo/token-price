@@ -96,3 +96,5 @@ def MASTER_CHEF_FARMS():
 
 def STAKING_REWARDS_FARMS():
   return {}
+
+ADDRESS_BALANCES = []

@@ -4,6 +4,7 @@ import os
 import traceback
 import math
 from brownie import interface
+from brownie.network.account import Account
 from prometheus_client import Gauge
 from requests.exceptions import HTTPError
 from . import master_chef
@@ -16,6 +17,7 @@ FARM_TVL = Gauge("farm_tvl_dollars", "Farm TVL in dollars", ["network", "project
 TVL = Gauge("tvl_dollars", "TVL in dollars", ["network", "project"])
 FARM_APR = Gauge("farm_apr_percent", "Farm APR in percent as 0-1.0", ["network", "project", "staked_token"])
 PRICE = Gauge("price", "Price of the token on a DEX", ["network", "ticker", "dex"])
+BALANCE = Gauge("balance", "Balance of an address of native tokens", ["network", "address"])
 K_GROWTH_SQRT = Gauge("k_growth_sqrt", "Tracks the sqrt(k)/lp_tokens of the pool, which allows to track the amount of fees accumulated over time", ["network", "ticker", "dex"])
 
 VAULT_TOTAL_ASSETS = Gauge("vault_total_assets", "Total amount of assets in the vault in the native token", ["network", "project"])
@@ -27,22 +29,22 @@ VAULT_LAST_REPORT = Gauge("last_report", "The timestamp of the last report of a 
 
 def update_metrics():
   if NETWORK == "bsc":
-    from .networks.bsc import MASTER_CHEF_FARMS, TOKEN_PRICES, STAKING_REWARDS_FARMS
+    from .networks.bsc import MASTER_CHEF_FARMS, TOKEN_PRICES, STAKING_REWARDS_FARMS, ADDRESS_BALANCES
     BLOCK_TIME = 3
   elif NETWORK == "matic":
-    from .networks.matic import MASTER_CHEF_FARMS, TOKEN_PRICES, STAKING_REWARDS_FARMS
+    from .networks.matic import MASTER_CHEF_FARMS, TOKEN_PRICES, STAKING_REWARDS_FARMS, ADDRESS_BALANCES
     BLOCK_TIME = 2
   elif NETWORK == "ethereum":
-    from .networks.ethereum import MASTER_CHEF_FARMS, TOKEN_PRICES, STAKING_REWARDS_FARMS
+    from .networks.ethereum import MASTER_CHEF_FARMS, TOKEN_PRICES, STAKING_REWARDS_FARMS, ADDRESS_BALANCES
     BLOCK_TIME = 15
   elif NETWORK == "heco":
-    from .networks.heco import MASTER_CHEF_FARMS, TOKEN_PRICES, STAKING_REWARDS_FARMS
+    from .networks.heco import MASTER_CHEF_FARMS, TOKEN_PRICES, STAKING_REWARDS_FARMS, ADDRESS_BALANCES
     BLOCK_TIME = 3
   elif NETWORK == "arbitrum":
-    from .networks.arbitrum import MASTER_CHEF_FARMS, TOKEN_PRICES, STAKING_REWARDS_FARMS
+    from .networks.arbitrum import MASTER_CHEF_FARMS, TOKEN_PRICES, STAKING_REWARDS_FARMS, ADDRESS_BALANCES
     BLOCK_TIME = 1
   elif NETWORK == "avalanche":
-    from .networks.avalanche import MASTER_CHEF_FARMS, TOKEN_PRICES, STAKING_REWARDS_FARMS
+    from .networks.avalanche import MASTER_CHEF_FARMS, TOKEN_PRICES, STAKING_REWARDS_FARMS, ADDRESS_BALANCES
     BLOCK_TIME = 1
 
   def update_prices():
@@ -120,6 +122,16 @@ def update_metrics():
           print(f"Error while fetching APY for {farm} {stake_token_name}")
           traceback.print_exc()
 
+  def update_address_balances():
+    for address in ADDRESS_BALANCES:
+      try:
+        balance = Account(address).balance().to("ether")
+
+        BALANCE.labels(NETWORK, address).set(balance)
+      except ValueError as e:
+        print(f"Error while balance of {address}: {e}")
+        traceback.print_exc()
+
   while True:
     try:
       update_prices()
@@ -127,6 +139,8 @@ def update_metrics():
       update_master_chef_farms()
 
       update_staking_rewards_farms()
+
+      update_address_balances()
     except HTTPError as e:
       if e.response.status_code == 429:
         print(f"Rate limited: {e}")

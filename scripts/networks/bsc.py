@@ -57,3 +57,5 @@ def MASTER_CHEF_FARMS_V2():
 @lru_cache
 def STAKING_REWARDS_FARMS():
   return {}
+
+ADDRESS_BALANCES = []
