@@ -46,6 +46,9 @@ def update_metrics():
   elif NETWORK == "avalanche":
     from .networks.avalanche import MASTER_CHEF_FARMS, TOKEN_PRICES, STAKING_REWARDS_FARMS, ADDRESS_BALANCES
     BLOCK_TIME = 1
+  elif NETWORK == "fantom":
+    from .networks.fantom import MASTER_CHEF_FARMS, TOKEN_PRICES, STAKING_REWARDS_FARMS, ADDRESS_BALANCES
+    BLOCK_TIME = 1
 
   def update_prices():
     for dex in TOKEN_PRICES():

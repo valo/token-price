@@ -37,6 +37,12 @@ live:
         host: https://api.avax.network/ext/bc/C/rpc
         id: avalanche
         name: avalanche
+  - name: Fantom
+    networks:
+      - chainid: 250
+        host: https://rpc.ftm.tools
+        id: fantom
+        name: fantom
 development:
   - cmd: ganache-cli
     cmd_settings:
