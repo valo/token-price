@@ -75,7 +75,11 @@ def update_metrics():
             total_assets = address.totalAssets() / 10**decimals
             total_debt = address.totalDebt() / 10**decimals
             TVL.labels(NETWORK, ticker).set(total_assets * underlying_price)
-            VAULT_UTILIZATION.labels(NETWORK, ticker).set(total_debt / total_assets)
+            if total_assets > 0:
+              VAULT_UTILIZATION.labels(NETWORK, ticker).set(total_debt / total_assets)
+            else:
+              VAULT_UTILIZATION.labels(NETWORK, ticker).set(0)
+
             VAULT_LAST_REPORT.labels(NETWORK, ticker).set(address.lastReport())
             VAULT_TOTAL_ASSETS.labels(NETWORK, ticker).set(address.totalAssets())
             VAULT_LOCKED_PROFIT.labels(NETWORK, ticker).set(address.lockedProfit())
