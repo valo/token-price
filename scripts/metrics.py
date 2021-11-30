@@ -14,17 +14,16 @@ from .utils import priceOf, priceOfUniPair, priceOfCurveLPToken, priceOfCurvePoo
 NETWORK = os.environ.get("NETWORK", "ethereum")
 
 FARM_TVL = Gauge("farm_tvl_dollars", "Farm TVL in dollars", ["network", "project", "staked_token"])
-TVL = Gauge("tvl_dollars", "TVL in dollars", ["network", "project"])
 FARM_APR = Gauge("farm_apr_percent", "Farm APR in percent as 0-1.0", ["network", "project", "staked_token"])
 PRICE = Gauge("price", "Price of the token on a DEX", ["network", "ticker", "dex"])
 BALANCE = Gauge("balance", "Balance of an address of native tokens", ["network", "address"])
 K_GROWTH_SQRT = Gauge("k_growth_sqrt", "Tracks the sqrt(k)/lp_tokens of the pool, which allows to track the amount of fees accumulated over time", ["network", "ticker", "dex"])
 
-VAULT_TOTAL_ASSETS = Gauge("vault_total_assets", "Total amount of assets in the vault in the native token", ["network", "project"])
-VAULT_LOCKED_PROFIT = Gauge("vault_locked_profit", "The amount of locked profit in the vault", ["network", "project"])
-
-VAULT_UTILIZATION = Gauge("utilization_percent", "The percent of the utilized assets by a vault", ["network", "ticker"])
-VAULT_LAST_REPORT = Gauge("last_report", "The timestamp of the last report of a vault", ["network", "ticker"])
+VAULT_TVL_DOLLARS = Gauge("tvl_dollars", "TVL in dollars", ["network", "project", "ticker", "version"])
+VAULT_TOTAL_ASSETS = Gauge("vault_total_assets", "Total amount of assets in the vault in the native token", ["network", "project", "ticker",  "version"])
+VAULT_LOCKED_PROFIT = Gauge("vault_locked_profit", "The amount of locked profit in the vault", ["network", "project", "ticker",  "version"])
+VAULT_UTILIZATION = Gauge("utilization_percent", "The percent of the utilized assets by a vault", ["network", "ticker",  "version"])
+VAULT_LAST_REPORT = Gauge("last_report", "The timestamp of the last report of a vault", ["network", "ticker", "version"])
 
 
 def update_metrics():
@@ -74,15 +73,16 @@ def update_metrics():
             decimals = underlying_token.decimals()
             total_assets = address.totalAssets() / 10**decimals
             total_debt = address.totalDebt() / 10**decimals
-            TVL.labels(NETWORK, ticker).set(total_assets * underlying_price)
+            version = address.apiVersion()
+            VAULT_TVL_DOLLARS.labels(NETWORK, ticker, ticker, version).set(total_assets * underlying_price)
             if total_assets > 0:
-              VAULT_UTILIZATION.labels(NETWORK, ticker).set(total_debt / total_assets)
+              VAULT_UTILIZATION.labels(NETWORK, ticker, version).set(total_debt / total_assets)
             else:
-              VAULT_UTILIZATION.labels(NETWORK, ticker).set(0)
+              VAULT_UTILIZATION.labels(NETWORK, ticker, version).set(0)
 
-            VAULT_LAST_REPORT.labels(NETWORK, ticker).set(address.lastReport())
-            VAULT_TOTAL_ASSETS.labels(NETWORK, ticker).set(address.totalAssets())
-            VAULT_LOCKED_PROFIT.labels(NETWORK, ticker).set(address.lockedProfit())
+            VAULT_LAST_REPORT.labels(NETWORK, ticker, version).set(address.lastReport())
+            VAULT_TOTAL_ASSETS.labels(NETWORK, ticker, ticker, version).set(address.totalAssets())
+            VAULT_LOCKED_PROFIT.labels(NETWORK, ticker, ticker, version).set(address.lockedProfit())
           else:
             price = priceOf(address, router_address=router)
 

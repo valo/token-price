@@ -82,11 +82,12 @@ def TOKEN_PRICES():
       ("tvDAI", tVaultDAI),
       ("tvWBTC", tVaultBTC),
       ("tvWETH", tVaultETH),
-      ("tvUSDC_V2", tVaultUSDC_V2),
-      ("tvDAI_V2", tVaultDAI_V2),
-      ("tvWBTC_V2", tVaultBTC_V2),
-      ("tvWETH_V2", tVaultETH_V2),
-      ("tvWMATIC_V2", tVaultMATIC_V2),
+
+      ("tvUSDC", tVaultUSDC_V2),
+      ("tvDAI", tVaultDAI_V2),
+      ("tvWBTC", tVaultBTC_V2),
+      ("tvWETH", tVaultETH_V2),
+      ("tvWMATIC", tVaultMATIC_V2),
     ]
   ),
   "DFYN": (
