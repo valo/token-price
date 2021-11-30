@@ -15,7 +15,7 @@ NETWORK = os.environ.get("NETWORK", "ethereum")
 
 FARM_TVL = Gauge("farm_tvl_dollars", "Farm TVL in dollars", ["network", "project", "staked_token"])
 FARM_APR = Gauge("farm_apr_percent", "Farm APR in percent as 0-1.0", ["network", "project", "staked_token"])
-PRICE = Gauge("price", "Price of the token on a DEX", ["network", "ticker", "dex"])
+PRICE = Gauge("price", "Price of the token on a DEX", ["network", "ticker", "dex", "version"])
 BALANCE = Gauge("balance", "Balance of an address of native tokens", ["network", "address"])
 K_GROWTH_SQRT = Gauge("k_growth_sqrt", "Tracks the sqrt(k)/lp_tokens of the pool, which allows to track the amount of fees accumulated over time", ["network", "ticker", "dex"])
 
@@ -55,6 +55,7 @@ def update_metrics():
 
       for ticker, address in tokens:
         try:
+          version = "1.0"
           if address._name == "UniswapPair":
             price = priceOfUniPair(address, router_address=router)
 
@@ -86,7 +87,7 @@ def update_metrics():
           else:
             price = priceOf(address, router_address=router)
 
-          PRICE.labels(NETWORK, ticker, dex).set(price)
+          PRICE.labels(NETWORK, ticker, dex, version).set(price)
         except ValueError as e:
           print(f"Error while fetching price of {ticker}")
           traceback.print_exc()
