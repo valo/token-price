@@ -32,7 +32,6 @@ def TOKEN_PRICES():
       ("tvWBTC", tVaultBTC),
       ("tvWETH", tVaultETH),
       ("tvWAVAX", tVaultAVAX),
-      ("tvWAVAX", tVaultBTC),
     ]
   ),
   "Pangolin": (
