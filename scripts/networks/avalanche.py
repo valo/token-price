@@ -14,6 +14,8 @@ AVAX = interface.IERC20("0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7")
 tVaultUSDC = interface.yEarnVault("0x52cE2c4Bd817AdB765c476901cc09621DCACEc62")
 tVaultDAI = interface.yEarnVault("0xdC808bADe323205f2c794198C1adDa8aEF215E29")
 tVaultAVAX = interface.yEarnVault("0x83EA27549acc3CB64c3fCda8379d1eA229a02712")
+tVaultETH = interface.yEarnVault("0x7f99CC27EF01F0d32939dBd993f6a857B6e9d235")
+tVaultBTC = interface.yEarnVault("0x4AaC7D14E674BCE476eD387FF5abb0Ac3F3187a1")
 
 @lru_cache()
 def TOKEN_PRICES():
@@ -30,6 +32,7 @@ def TOKEN_PRICES():
       ("tvWBTC", tVaultBTC),
       ("tvWETH", tVaultETH),
       ("tvWAVAX", tVaultAVAX),
+      ("tvWAVAX", tVaultBTC),
     ]
   ),
   "Pangolin": (
