@@ -70,7 +70,11 @@ def update_metrics():
             price = address.pricePerShare() / 10 ** address.decimals()
 
             underlying_token = interface.IERC20(address.token())
-            underlying_price = priceOf(underlying_token, router_address=router)
+            try:
+              underlying_price = priceOf(underlying_token, router_address=router)
+            except ValueError as e:
+              underlying_price = 0
+
             decimals = underlying_token.decimals()
             total_assets = address.totalAssets() / 10**decimals
             total_debt = address.totalDebt() / 10**decimals
