@@ -16,7 +16,7 @@ tVaultDAI = interface.yEarnVault("0xdC808bADe323205f2c794198C1adDa8aEF215E29")
 tVaultAVAX = interface.yEarnVault("0x83EA27549acc3CB64c3fCda8379d1eA229a02712")
 tVaultETH = interface.yEarnVault("0x7f99CC27EF01F0d32939dBd993f6a857B6e9d235")
 tVaultBTC = interface.yEarnVault("0x4AaC7D14E674BCE476eD387FF5abb0Ac3F3187a1")
-tVault3crypto_V2 = interface.yEarnVault("0xa4B18Ff7D70c983d3A6bc4a79F8C6D598cDCb4C6")
+tVault3crypto_V2 = interface.yEarnVault("0x71712Ad47b2cBC4Fb2e814dBaC44A31749A5195e")
 
 @lru_cache()
 def TOKEN_PRICES():
