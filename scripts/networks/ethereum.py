@@ -41,9 +41,6 @@ def TOKEN_PRICES():
   CRV_TRICRYPTO = interface.CurveLPToken("0xca3d75ac011bf5ad07a98d02f18225f9bd9a6bdf")
   CRV_TRICRYPTO2 = interface.CurveLPToken("0xc4AD29ba4B3c580e6D59105FFf484999997675Ff")
   CRV_MIM = interface.CurvePool("0x5a6a4d54456819380173272a5e8e9b9904bdf41b")
-  yvCRV_TRICRYPTO = interface.yEarnVault("0x3d980e50508cfd41a13837a60149927a11c03731")
-  yvCRV_TRICRYPTO2 = interface.yEarnVault("0xE537B5cc158EB71037D4125BDD7538421981E6AA")
-  yvCRV_MIM = interface.yEarnVault("0x2dfb14e32e2f8156ec15a2c21c3a6c053af52be8")
 
   return {
   "Uniswap": (
@@ -72,9 +69,6 @@ def TOKEN_PRICES():
       ("crvTricrypto", CRV_TRICRYPTO),
       ("crvTricrypto2", CRV_TRICRYPTO2),
       ("crvMIM", CRV_MIM),
-      ("yvCurve-MIM", yvCRV_MIM),
-      ("yvCurve-triCrypto", yvCRV_TRICRYPTO),
-      ("yvCurve-triCrypto2", yvCRV_TRICRYPTO2),
     ]
   ),
   "SushiSwap": (
