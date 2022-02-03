@@ -1,4 +1,5 @@
 import os
+import traceback
 from brownie import interface
 from brownie.exceptions import ContractNotFound
 from datetime import datetime, timedelta
@@ -129,9 +130,12 @@ def priceOfCurveLPToken(lp_token: interface.CurveLPToken, router_address: str) -
   for i in range(5):
     try:
       coin = interface.ERC20(minter.coins(i))
-      total_dollars_locked += priceOf(coin, router_address) * minter.balances(i) / 10 ** coin.decimals()
+      total_dollars_locked += priceUnknownToken(coin, router_address) * minter.balances(i) / 10 ** coin.decimals()
     except ValueError:
       break
+
+  if total_dollars_locked == 0:
+    raise ValueError(f"Can't price {lp_token}")
 
   return total_dollars_locked / total_supply
 
@@ -142,9 +146,12 @@ def priceOfCurvePool(lp_token: interface.CurvePool, router_address: str) -> floa
   for i in range(5):
     try:
       coin = interface.ERC20(lp_token.coins(i))
-      total_dollars_locked += priceOf(coin, router_address) * lp_token.balances(i) / 10 ** coin.decimals()
+      total_dollars_locked += priceUnknownToken(coin, router_address) * lp_token.balances(i) / 10 ** coin.decimals()
     except ValueError:
       break
+
+  if total_dollars_locked == 0:
+    raise ValueError(f"Can't price {lp_token}")
 
   return total_dollars_locked / total_supply
 
@@ -165,3 +172,48 @@ def homoraV2PositionSize(pos_id: int, bank_address: str, router_address: str) ->
     total_debt += priceOf(debt_token, router_address) * debt_size / 10 ** debt_token.decimals()
 
   return position_size - total_debt
+
+# Sometimes we need to detect what type of token we are dealing with, so we try a couple of
+# contracts to extract the price
+def priceUnknownToken(token, router):
+  # Try an Aave V2 aToken
+  try:
+    atoken = interface.AToken(token)
+    underlying = interface.IERC20(atoken.UNDERLYING_ASSET_ADDRESS())
+    price_of_underlying = priceOf(underlying, router_address=router)
+    return price_of_underlying
+  except ValueError as e:
+    # print(f"Error while fetching price of {token}: {e}")
+    # traceback.print_exc()
+    pass
+
+  # Try Curve LP Token with a minter
+  try:
+    curve_lp = interface.CurveLPToken(token)
+    return priceOfCurveLPToken(curve_lp, router_address=router)
+  except ValueError as e:
+    # print(f"Error while fetching price of {token}: {e}")
+    # traceback.print_exc()
+    pass
+
+  # Try Curve LP Token without a minter
+  try:
+    curve_lp = interface.CurvePool(token)
+    return priceOfCurvePool(curve_lp, router_address=router)
+  except ValueError as e:
+    # print(f"Error while fetching price of {token}: {e}")
+    # traceback.print_exc()
+    pass
+
+  # Try to price as a regular ERC20 traded on a dex
+  try:
+    erc20 = interface.IERC20(token)
+    return priceOf(erc20, router_address=router)
+  except ValueError as e:
+    # print(f"Error while fetching price of {token}: {e}")
+    # traceback.print_exc()
+    pass
+  
+  print(f"Can't price {token}")
+  return 0
+

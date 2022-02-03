@@ -1,15 +1,15 @@
 import threading
 import time
 import os
-import traceback
 import math
+import traceback
 from brownie import interface
 from brownie.network.account import Account
 from prometheus_client import Gauge
 from requests.exceptions import HTTPError
 from . import master_chef
 from . import staking_rewards
-from .utils import priceOf, priceOfUniPair, priceOfCurveLPToken, priceOfCurvePool
+from .utils import priceOf, priceOfUniPair, priceOfCurveLPToken, priceOfCurvePool, priceUnknownToken
 
 NETWORK = os.environ.get("NETWORK", "ethereum")
 
@@ -70,10 +70,7 @@ def update_metrics():
             price = address.pricePerShare() / 10 ** address.decimals()
 
             underlying_token = interface.IERC20(address.token())
-            try:
-              underlying_price = priceOf(underlying_token, router_address=router)
-            except ValueError as e:
-              underlying_price = 0
+            underlying_price = priceUnknownToken(underlying_token, router)
 
             decimals = underlying_token.decimals()
             total_assets = address.totalAssets() / 10**decimals
