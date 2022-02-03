@@ -89,7 +89,7 @@ def TOKEN_PRICES():
       ("tvWBTC", tVaultBTC_V2),
       ("tvWETH", tVaultETH_V2),
       ("tvWMATIC", tVaultMATIC_V2),
-      ("tv3crypto", tVault3crypto_V2),
+      ("tvcrvUSDBTCETH", tVault3crypto_V2),
     ]
   ),
   "DFYN": (
