@@ -28,12 +28,12 @@ def TOKEN_PRICES():
       ("BTC", BTC),
       ("TIME", TIME),
 
-      ("tvUSDC", tVaultUSDC),
-      ("tvDAI", tVaultDAI),
-      ("tvWBTC", tVaultBTC),
-      ("tvWETH", tVaultETH),
+      ("tvUSDC.e", tVaultUSDC),
+      ("tvDAI.e", tVaultDAI),
+      ("tvWBTC.e", tVaultBTC),
+      ("tvWETH.e", tVaultETH),
       ("tvWAVAX", tVaultAVAX),
-      ("tv3crypto", tVault3crypto_V2),
+      ("tvcrvUSDBTCETH", tVault3crypto_V2),
     ]
   ),
   "Pangolin": (
