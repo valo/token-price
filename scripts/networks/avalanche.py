@@ -24,8 +24,8 @@ def TOKEN_PRICES():
   "TraderJoe": (
     TRADERJOE_ROUTER,
     [
-      ("ETH", ETH),
-      ("BTC", BTC),
+      ("WETH.e", ETH),
+      ("WBTC.e", BTC),
       ("TIME", TIME),
 
       ("tvUSDC.e", tVaultUSDC),
