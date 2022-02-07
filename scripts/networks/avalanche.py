@@ -11,6 +11,7 @@ USDT = interface.IERC20("0xc7198437980c041c805a1edcba50c1ce5db95118")
 DAI = interface.IERC20("0xd586e7f844cea2f87f50152665bcbc2c279d8d70")
 TIME = interface.IERC20("0xb54f16fb19478766a268f172c9480f8da1a7c9c3")
 AVAX = interface.IERC20("0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7")
+crvUSDBTCETH = interface.CurveLPToken("0x1daB6560494B04473A0BE3E7D83CF3Fdf3a51828")
 
 tVaultUSDC = interface.yEarnVault("0x52cE2c4Bd817AdB765c476901cc09621DCACEc62")
 tVaultDAI = interface.yEarnVault("0xdC808bADe323205f2c794198C1adDa8aEF215E29")
@@ -31,6 +32,7 @@ def TOKEN_PRICES():
       ("USDT.e", USDT),
       ("DAI.e", DAI),
       ("TIME", TIME),
+      ("crvUSDBTCETH", crvUSDBTCETH),
 
       ("tvUSDC.e", tVaultUSDC),
       ("tvDAI.e", tVaultDAI),

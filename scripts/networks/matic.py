@@ -37,6 +37,8 @@ def TOKEN_PRICES():
   WAULT_ETH_wBTC = interface.UniswapPair("0x30AdBCAb9Fbb4436109fcf3058D1Af27E6E33F3F")
   WAULT_ETH_USDC = interface.UniswapPair("0xd928Ce1d0F2642e44615768761C0F00c23E0d588")
 
+  crvUSDBTCETH = interface.CurveLPToken("0xdAD97F7713Ae9437fa9249920eC8507e5FbB23d3")
+
   tVaultUSDC = interface.yEarnVault("0xEB02e1024cC16bCD28adE5A87D46257dc307E18C")
   tVaultDAI = interface.yEarnVault("0xf5e364b9c07222cdec7d371c1422625593966c54")
   tVaultBTC = interface.yEarnVault("0x7Cd28e21a89325EB5b2395591E86374522396E77")
@@ -48,6 +50,7 @@ def TOKEN_PRICES():
   tVaultETH_V2 = interface.yEarnVault("0x3d44F03a04b08863cc8825384f834dfb97466b9B")
   tVaultMATIC_V2 = interface.yEarnVault("0xE11678341625cD88Bb25544e39B2c62CeDcC83f1")
   tVault3crypto_V2 = interface.yEarnVault("0xbc85571cd19303ff45a37baf9bf446c48b1f7671")
+
 
   return {
   "Sushi-Polygon": (
@@ -83,6 +86,7 @@ def TOKEN_PRICES():
       ("tvDAI", tVaultDAI),
       ("tvWBTC", tVaultBTC),
       ("tvWETH", tVaultETH),
+      ("crvUSDBTCETH", crvUSDBTCETH),
 
       ("tvUSDC", tVaultUSDC_V2),
       ("tvDAI", tVaultDAI_V2),
