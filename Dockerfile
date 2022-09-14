@@ -19,4 +19,4 @@ COPY . /app
 
 ENTRYPOINT [ "gunicorn" ]
 
-CMD [ "-b", "0.0.0.0:5000", "app:app" ]
+CMD [ "-b", "0.0.0.0:5000", "--worker-tmp-dir", "/tmp", "app:app" ]
