@@ -14,7 +14,7 @@ p = project.load()
 network.connect(os.environ.get('NETWORK', 'ethereum'))
 sys.modules["brownie"].interface = p.interface
 
-from scripts.utils import priceOf, priceOf1InchPair, priceOfUniPair, priceOfCurveLPToken, homoraV2PositionSize
+from scripts.utils import priceOf, priceOf1InchPair, priceOfUniPair, priceOfCurveLPToken, homoraV2PositionSize, glpPrice
 from scripts.the_graph import pairStats
 
 @app.route('/token_price/<address>')
@@ -67,6 +67,10 @@ def homora_v2_position(pos_id):
         bank_address=request.args.get("bank_address", "0xba5eBAf3fc1Fcca67147050Bf80462393814E54B"),
         router_address=request.args.get("router", "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D")
     ))
+
+@app.route("/glp_price/<address>")
+def glp_price(address):
+    return str(glpPrice(address))
 
 if os.environ.get('RUN_METRICS', '0') == '1':
     app.wsgi_app = DispatcherMiddleware(app.wsgi_app, {

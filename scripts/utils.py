@@ -217,3 +217,16 @@ def priceUnknownToken(token, router):
   print(f"Can't price {token}")
   return 0
 
+def glpPrice(glp_manager):
+  try:
+    manager = interface.GlpManager(glp_manager)
+    glp_token = interface.IERC20(manager.glp())
+
+    aum = manager.getAum(1)
+    total_supply = glp_token.totalSupply()
+
+    return aum / total_supply / 10**12
+  except ValueError:
+    pass
+
+  return 0
