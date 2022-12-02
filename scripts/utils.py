@@ -222,7 +222,7 @@ def glpPrice(glp_manager):
     manager = interface.GlpManager(glp_manager)
     glp_token = interface.IERC20(manager.glp())
 
-    aum = manager.getAum(1)
+    aum = manager.getAum(0)
     total_supply = glp_token.totalSupply()
 
     return aum / total_supply / 10**12
@@ -230,3 +230,39 @@ def glpPrice(glp_manager):
     pass
 
   return 0
+
+def glpTokenAum(vault, token):
+  token_price = vault.getMaxPrice(token)
+  poolAmount = vault.poolAmounts(token)
+  decimals = vault.tokenDecimals(token)
+
+  if (vault.stableTokens(token)):
+    return poolAmount * token_price / 10 ** decimals
+  else:
+    aum = 0
+    size = vault.globalShortSizes(token);
+    if (size > 0):
+      averagePrice = vault.globalShortAveragePrices(token);
+      priceDelta = token_price - averagePrice
+
+      delta = size * priceDelta / averagePrice
+
+      aum += delta
+
+    aum = aum + vault.guaranteedUsd(token)
+
+    reservedAmount = vault.reservedAmounts(token)
+    aum += (poolAmount - reservedAmount) * token_price / 10 ** decimals
+
+    return aum
+
+
+
+def glpWeight(glp_manager, token):
+  manager = interface.GlpManager(glp_manager)
+  vault = interface.GlpVault(manager.vault())
+  
+  glp_aum = manager.getAum(0)
+  token_aum = glpTokenAum(vault, token)
+
+  return token_aum / glp_aum
