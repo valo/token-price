@@ -256,8 +256,6 @@ def glpTokenAum(vault, token):
 
     return aum
 
-
-
 def glpWeight(glp_manager, token):
   manager = interface.GlpManager(glp_manager)
   vault = interface.GlpVault(manager.vault())
@@ -266,3 +264,11 @@ def glpWeight(glp_manager, token):
   token_aum = glpTokenAum(vault, token)
 
   return token_aum / glp_aum
+
+def glpRewards(rewards_tracker, address):
+  tracker = interface.IRewardsTracker(rewards_tracker)
+
+  claimable = tracker.claimable(address)
+  decimals = tracker.decimals()
+
+  return claimable / 10**decimals

@@ -14,7 +14,7 @@ p = project.load()
 network.connect(os.environ.get('NETWORK', 'ethereum'))
 sys.modules["brownie"].interface = p.interface
 
-from scripts.utils import priceOf, priceOf1InchPair, priceOfUniPair, priceOfCurveLPToken, homoraV2PositionSize, glpPrice, glpWeight
+from scripts.utils import priceOf, priceOf1InchPair, priceOfUniPair, priceOfCurveLPToken, homoraV2PositionSize, glpPrice, glpWeight, glpRewards
 from scripts.the_graph import pairStats
 
 @app.route('/token_price/<address>')
@@ -76,6 +76,10 @@ def glp_price(address):
 def glp_weight(address, token):
     weights = glpWeight(address, token)
     return str(weights)
+
+@app.route("/glp/rewards/<rewards_tracker>/claimable/<address>")
+def glp_rewards(rewards_tracker, address):
+    return str(glpRewards(rewards_tracker, address))
 
 if os.environ.get('RUN_METRICS', '0') == '1':
     app.wsgi_app = DispatcherMiddleware(app.wsgi_app, {
