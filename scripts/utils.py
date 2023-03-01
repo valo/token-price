@@ -254,6 +254,12 @@ def price_unknown_token(token, router: str):
   except ValueError as e:
     pass
 
+  # Try a GLP LP token
+  try:
+    return glpPrice(token)
+  except ValueError as e:
+    pass
+
   # Try to price as a regular ERC20 traded on a dex
   try:
     erc20 = interface.IERC20(token)
@@ -266,19 +272,14 @@ def price_unknown_token(token, router: str):
   return None
 
 def glpPrice(glp_manager):
-  try:
-    manager = interface.GlpManager(glp_manager)
-    glp_token = interface.IERC20(manager.glp())
+  manager = interface.GlpManager(glp_manager)
+  glp_token = interface.IERC20(manager.glp())
 
-    aum = manager.getAum(0)
-    total_supply = glp_token.totalSupply()
+  aum = manager.getAum(0)
+  total_supply = glp_token.totalSupply()
 
-    return aum / total_supply / 10**12
-  except ValueError:
-    pass
-
-  return 0
-
+  return aum / total_supply / 10**12
+  
 def glpTokenAum(vault, token):
   token_price = vault.getMaxPrice(token)
   poolAmount = vault.poolAmounts(token)
