@@ -2,9 +2,8 @@ import os
 import traceback
 from brownie import interface
 from brownie.exceptions import ContractNotFound
-from datetime import datetime, timedelta
 from functools import lru_cache
-from typing import List
+from typing import List, Callable
 
 @lru_cache
 def DAI() -> interface.IERC20:
@@ -66,7 +65,7 @@ def getUSDCPath(token: interface.IERC20, router: interface.UniswapRouterV2) -> L
 
   if reservesInDAI == maxReserves:
     return [token, DAI()]
-  
+
   if reservesInWETH == maxReserves:
     return [token, WETH(), USDC()]
 
@@ -82,6 +81,15 @@ def priceOf(token: interface.IERC20, router_address: str) -> float:
   router = interface.UniswapRouterV2(router_address)
   path = getUSDCPath(token, router)
   return router.getAmountsOut(10 ** token.decimals() / 100, path)[-1] / 10 ** path[-1].decimals() * 100
+
+def priceOfyEarnVaultShare(token: interface.IERC20, router_address: str) -> float:
+  yearn_vault = interface.yEarnVault(token)
+  underlying_price = price_unknown_token(yearn_vault.token(), router=router_address)
+
+  vault_total_supply = yearn_vault.totalSupply()
+  vault_balance = yearn_vault.totalAssets()
+
+  return underlying_price * vault_balance / vault_total_supply
 
 def priceOfUniPair(uni_pair: interface.UniswapPair, router_address: str) -> float:
   (token0Reserves, token1Reserves, _) = uni_pair.getReserves()
@@ -121,39 +129,63 @@ def priceOf1InchPair(oneinch_pair: interface.IMooniswap, router_address: str) ->
 
   return total_pool / oneinch_pair.totalSupply() * 10 ** oneinch_pair.decimals()
 
+def price_curve_pool(lp_token: interface.CurvePool, balances: List[int], get_coin: Callable[[int], interface.ERC20], get_dy, router_address:str):
+  if len(balances) == 0:
+    raise ValueError(f"Can't get balances for curve lp token {lp_token}")
+
+  priced_token_index = None
+  token_prices = []
+  decimals = []
+  coins = []
+
+  for index, balance in enumerate(balances):
+    coin_address = get_coin(index)
+    if coin_address == "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE":
+      coin = WETH()
+    else:
+      coin = interface.ERC20(coin_address)
+
+    coins.append(coin)
+    decimals.append(coin.decimals())
+    price = price_unknown_token(coin, router_address)
+    token_prices.append(price)
+
+    if price and priced_token_index is None:
+      priced_token_index = index
+
+  if None in token_prices and priced_token_index is not None:
+    # Price the remaining tokens using the priced token
+    for index, balance in enumerate(balances):
+      if token_prices[index]:
+        continue
+
+      dy = get_dy(index, priced_token_index, 10 ** decimals[index])
+      token_prices[index] = dy * token_prices[priced_token_index] / 10 ** decimals[priced_token_index]
+
+  if None in token_prices:
+    raise ValueError(f"Can't price {lp_token}")
+
+  total_dollars_locked = 0
+  for coin, price, balance, decimals in zip(coins, token_prices, balances, decimals):
+    total_dollars_locked += price * balance / 10 ** decimals
+
+  total_supply = lp_token.totalSupply() / 10 ** lp_token.decimals()
+  return total_dollars_locked / total_supply
+
 def priceOfCurveLPToken(lp_token: interface.CurveLPToken, router_address: str) -> float:
   minter = interface.CurveLPMinter(lp_token.minter())
 
-  total_supply = lp_token.totalSupply() / 10 ** 18
-
-  total_dollars_locked = 0
-  for i in range(5):
+  balances = []
+  for index in range(5):
     try:
-      coin = interface.ERC20(minter.coins(i))
-      total_dollars_locked += priceUnknownToken(coin, router_address) * minter.balances(i) / 10 ** coin.decimals()
+      balances.append(minter.balances(index))
     except ValueError:
       break
 
-  if total_dollars_locked == 0:
-    raise ValueError(f"Can't price {lp_token}")
-
-  return total_dollars_locked / total_supply
+  return price_curve_pool(lp_token, balances, minter.coins, minter.get_dy, router_address)
 
 def priceOfCurvePool(lp_token: interface.CurvePool, router_address: str) -> float:
-  total_supply = lp_token.totalSupply() / 10 ** 18
-
-  total_dollars_locked = 0
-  for i in range(5):
-    try:
-      coin = interface.ERC20(lp_token.coins(i))
-      total_dollars_locked += priceUnknownToken(coin, router_address) * lp_token.balances(i) / 10 ** coin.decimals()
-    except ValueError:
-      break
-
-  if total_dollars_locked == 0:
-    raise ValueError(f"Can't price {lp_token}")
-
-  return total_dollars_locked / total_supply
+  return price_curve_pool(lp_token, lp_token.get_balances(), lp_token.coins, lp_token.get_dy, router_address)
 
 def homoraV2PositionSize(pos_id: int, bank_address: str, router_address: str) -> float:
   bank = interface.HomoraBank(bank_address)
@@ -175,7 +207,7 @@ def homoraV2PositionSize(pos_id: int, bank_address: str, router_address: str) ->
 
 # Sometimes we need to detect what type of token we are dealing with, so we try a couple of
 # contracts to extract the price
-def priceUnknownToken(token, router):
+def price_unknown_token(token, router: str):
   # Try an Aave V2 aToken
   try:
     atoken = interface.AToken(token)
@@ -205,6 +237,14 @@ def priceUnknownToken(token, router):
     # traceback.print_exc()
     pass
 
+  # Try a yEarn vault
+  try:
+    return priceOfyEarnVaultShare(token, router_address=router)
+  except ValueError as e:
+    # print(f"Error while fetching price of {token}: {e}")
+    # traceback.print_exc()
+    pass
+
   # Try to price as a regular ERC20 traded on a dex
   try:
     erc20 = interface.IERC20(token)
@@ -215,7 +255,7 @@ def priceUnknownToken(token, router):
     pass
   
   print(f"Can't price {token}")
-  return 0
+  return None
 
 def glpPrice(glp_manager):
   try:
@@ -240,9 +280,9 @@ def glpTokenAum(vault, token):
     return poolAmount * token_price / 10 ** decimals
   else:
     aum = 0
-    size = vault.globalShortSizes(token);
+    size = vault.globalShortSizes(token)
     if (size > 0):
-      averagePrice = vault.globalShortAveragePrices(token);
+      averagePrice = vault.globalShortAveragePrices(token)
       priceDelta = token_price - averagePrice
 
       delta = size * priceDelta / averagePrice

@@ -9,7 +9,7 @@ from prometheus_client import Gauge
 from requests.exceptions import HTTPError
 from . import master_chef
 from . import staking_rewards
-from .utils import priceOf, priceOfUniPair, priceOfCurveLPToken, priceOfCurvePool, priceUnknownToken
+from .utils import priceOf, priceOfUniPair, priceOfCurveLPToken, priceOfCurvePool, price_unknown_token
 
 NETWORK = os.environ.get("NETWORK", "ethereum")
 
@@ -70,7 +70,7 @@ def update_metrics():
             price = address.pricePerShare() / 10 ** address.decimals()
 
             underlying_token = interface.IERC20(address.token())
-            underlying_price = priceUnknownToken(underlying_token, router)
+            underlying_price = price_unknown_token(underlying_token, router)
 
             decimals = underlying_token.decimals()
             total_assets = address.totalAssets() / 10**decimals

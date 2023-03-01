@@ -14,8 +14,15 @@ p = project.load()
 network.connect(os.environ.get('NETWORK', 'ethereum'))
 sys.modules["brownie"].interface = p.interface
 
-from scripts.utils import priceOf, priceOf1InchPair, priceOfUniPair, priceOfCurveLPToken, homoraV2PositionSize, glpPrice, glpWeight, glpRewards
+from scripts.utils import priceOf, priceOf1InchPair, priceOfUniPair, priceOfCurveLPToken, priceOfCurvePool, homoraV2PositionSize, glpPrice, glpWeight, glpRewards, price_unknown_token
 from scripts.the_graph import pairStats
+
+@app.route('/price/<address>')
+def unknown_price(address):
+  return str(price_unknown_token(
+      address,
+      router=request.args.get("router", "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D")
+  ))
 
 @app.route('/token_price/<address>')
 def token_price(address):
@@ -48,6 +55,14 @@ def curve_lp_price(address):
     lp_token = p.interface.CurveLPToken(address)
     return str(priceOfCurveLPToken(
         lp_token,
+        router_address=request.args.get("router", "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D")
+    ))
+
+@app.route('/curve/pool_price/<address>')
+def curve_pool_price(address):
+    pool_token = p.interface.CurvePool(address)
+    return str(priceOfCurvePool(
+        pool_token,
         router_address=request.args.get("router", "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D")
     ))
 

@@ -1,0 +1,5 @@
+[pylint]
+good-names=camelCase
+
+[pycodestyle]
+indent-string="  "
