@@ -2,41 +2,44 @@ import os
 import traceback
 from brownie import interface
 from brownie.exceptions import ContractNotFound
-from functools import lru_cache
 from typing import List, Callable
+from cachetools import TTLCache, cached
 
-@lru_cache
+ttl_cache = TTLCache(maxsize=1024, ttl=60)
+
+@cached(ttl_cache)
 def DAI() -> interface.IERC20:
   return interface.IERC20(os.environ.get('DAI_ADDRESS', "0x6b175474e89094c44da98b954eedeac495271d0f"))
 
-@lru_cache
+@cached(ttl_cache)
 def WETH() -> interface.IERC20:
   return interface.IERC20(os.environ.get('WETH_ADDRESS', "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"))
 
-@lru_cache
+@cached(ttl_cache)
 def USDT() -> interface.IERC20:
   return interface.IERC20(os.environ.get('USDT_ADDRESS', "0xdac17f958d2ee523a2206206994597c13d831ec7"))
 
-@lru_cache
+@cached(ttl_cache)
 def USDC() -> interface.IERC20:
   return interface.IERC20(os.environ.get('USDC_ADDRESS', "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"))
 
-@lru_cache
+@cached(ttl_cache)
 def getFactory(router) -> interface.UniswapFactoryV2:
   return interface.UniswapFactoryV2(router.factory())
 
-@lru_cache
+@cached(ttl_cache)
 def getToken0(pair) -> interface.IERC20:
   return interface.IERC20(pair.token0())
 
-@lru_cache
+@cached(ttl_cache)
 def getToken1(pair) -> interface.IERC20:
   return interface.IERC20(pair.token1())
 
-@lru_cache
+@cached(ttl_cache)
 def getPair(factory, token0, token1) -> interface.UniswapPair:
   return interface.UniswapPair(factory.getPair(token0, token1))
 
+@cached(ttl_cache)
 def getReserves(token, otherToken, factory) -> float:
   try:
     pair = getPair(factory, token, otherToken)
@@ -50,6 +53,7 @@ def getReserves(token, otherToken, factory) -> float:
   else:
     return token1Reserves / 10**(token.decimals())
 
+@cached(ttl_cache)
 def getUSDCPath(token: interface.IERC20, router: interface.UniswapRouterV2) -> List[interface.IERC20]:
   factory = getFactory(router)
   if token != WETH():
@@ -74,6 +78,7 @@ def getUSDCPath(token: interface.IERC20, router: interface.UniswapRouterV2) -> L
 
   return [token, USDC()]
 
+@cached(ttl_cache)
 def priceOf(token: interface.IERC20, router_address: str) -> float:
   if token == USDC() or token == USDT():
     return 1.0
@@ -207,6 +212,7 @@ def homoraV2PositionSize(pos_id: int, bank_address: str, router_address: str) ->
 
 # Sometimes we need to detect what type of token we are dealing with, so we try a couple of
 # contracts to extract the price
+@cached(ttl_cache)
 def price_unknown_token(token, router: str):
   # Try an Aave V2 aToken
   try:
