@@ -1,45 +1,48 @@
 import os
 import traceback
+import logging
+import cachetools.func
 from brownie import interface
 from brownie.exceptions import ContractNotFound
 from typing import List, Callable
-from cachetools import TTLCache, cached
 
-ttl_cache = TTLCache(maxsize=1024, ttl=60)
+logger = logging.getLogger(__name__)
 
-@cached(ttl_cache)
+DEFAULT_TTL_CACHE=60
+
+@cachetools.func.ttl_cache(ttl=DEFAULT_TTL_CACHE)
 def DAI() -> interface.IERC20:
   return interface.IERC20(os.environ.get('DAI_ADDRESS', "0x6b175474e89094c44da98b954eedeac495271d0f"))
 
-@cached(ttl_cache)
+@cachetools.func.ttl_cache(ttl=DEFAULT_TTL_CACHE)
 def WETH() -> interface.IERC20:
   return interface.IERC20(os.environ.get('WETH_ADDRESS', "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"))
 
-@cached(ttl_cache)
+@cachetools.func.ttl_cache(ttl=DEFAULT_TTL_CACHE)
 def USDT() -> interface.IERC20:
   return interface.IERC20(os.environ.get('USDT_ADDRESS', "0xdac17f958d2ee523a2206206994597c13d831ec7"))
 
-@cached(ttl_cache)
+@cachetools.func.ttl_cache(ttl=DEFAULT_TTL_CACHE)
 def USDC() -> interface.IERC20:
   return interface.IERC20(os.environ.get('USDC_ADDRESS', "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"))
 
-@cached(ttl_cache)
+@cachetools.func.ttl_cache(ttl=DEFAULT_TTL_CACHE)
 def getFactory(router) -> interface.UniswapFactoryV2:
   return interface.UniswapFactoryV2(router.factory())
 
-@cached(ttl_cache)
+@cachetools.func.ttl_cache(ttl=DEFAULT_TTL_CACHE)
 def getToken0(pair) -> interface.IERC20:
   return interface.IERC20(pair.token0())
 
-@cached(ttl_cache)
+@cachetools.func.ttl_cache(ttl=DEFAULT_TTL_CACHE)
 def getToken1(pair) -> interface.IERC20:
   return interface.IERC20(pair.token1())
 
-@cached(ttl_cache)
+@cachetools.func.ttl_cache(ttl=DEFAULT_TTL_CACHE)
 def getPair(factory, token0, token1) -> interface.UniswapPair:
   return interface.UniswapPair(factory.getPair(token0, token1))
 
-@cached(ttl_cache)
+@cachetools.func.ttl_cache(ttl=DEFAULT_TTL_CACHE)
 def getReserves(token, otherToken, factory) -> float:
   try:
     pair = getPair(factory, token, otherToken)
@@ -47,13 +50,14 @@ def getReserves(token, otherToken, factory) -> float:
     return 0
 
   (token0Reserves, token1Reserves, _) = pair.getReserves()
+  logger.debug(f"Reserves of pair {pair}: {[token0Reserves, token1Reserves]}")
 
   if token == getToken0(pair):
     return token0Reserves / 10**(token.decimals())
   else:
     return token1Reserves / 10**(token.decimals())
 
-@cached(ttl_cache)
+@cachetools.func.ttl_cache(ttl=DEFAULT_TTL_CACHE)
 def getUSDCPath(token: interface.IERC20, router: interface.UniswapRouterV2) -> List[interface.IERC20]:
   factory = getFactory(router)
   if token != WETH():
@@ -65,6 +69,7 @@ def getUSDCPath(token: interface.IERC20, router: interface.UniswapRouterV2) -> L
   reservesInUSDC = getReserves(USDC(), token, factory)
   reservesInDAI = getReserves(DAI(), token, factory)
 
+  logger.debug(f"Reserves for {token}: {[reservesInDAI, reservesInUSDC, reservesInWETH, reservesInUSDT]}")
   maxReserves = max(reservesInDAI, reservesInUSDC, reservesInWETH, reservesInUSDT)
 
   if reservesInDAI == maxReserves:
@@ -78,13 +83,14 @@ def getUSDCPath(token: interface.IERC20, router: interface.UniswapRouterV2) -> L
 
   return [token, USDC()]
 
-@cached(ttl_cache)
+@cachetools.func.ttl_cache(ttl=DEFAULT_TTL_CACHE)
 def priceOf(token: interface.IERC20, router_address: str) -> float:
   if token == USDC() or token == USDT():
     return 1.0
 
   router = interface.UniswapRouterV2(router_address)
   path = getUSDCPath(token, router)
+  logger.debug(f"Path for {token}: {path}")
   return router.getAmountsOut(10 ** token.decimals() / 100, path)[-1] / 10 ** path[-1].decimals() * 100
 
 def priceOfyEarnVaultShare(token: interface.IERC20, router_address: str) -> float:
@@ -138,6 +144,8 @@ def price_curve_pool(lp_token: interface.CurvePool, balances: List[int], get_coi
   if len(balances) == 0:
     raise ValueError(f"Can't get balances for curve lp token {lp_token}")
 
+  logger.debug(f"Curve pool {lp_token} balances: {balances}")
+
   priced_token_index = None
   token_prices = []
   decimals = []
@@ -166,6 +174,9 @@ def price_curve_pool(lp_token: interface.CurvePool, balances: List[int], get_coi
 
       dy = get_dy(index, priced_token_index, 10 ** decimals[index])
       token_prices[index] = dy * token_prices[priced_token_index] / 10 ** decimals[priced_token_index]
+
+  logger.debug(f"Curve pool {lp_token} tokens: {coins}")
+  logger.debug(f"Curve pool {lp_token} token prices: {token_prices}")
 
   if None in token_prices:
     raise ValueError(f"Can't price {lp_token}")
@@ -212,7 +223,7 @@ def homoraV2PositionSize(pos_id: int, bank_address: str, router_address: str) ->
 
 # Sometimes we need to detect what type of token we are dealing with, so we try a couple of
 # contracts to extract the price
-@cached(ttl_cache)
+@cachetools.func.ttl_cache(ttl=DEFAULT_TTL_CACHE)
 def price_unknown_token(token, router: str):
   # Try an Aave V2 aToken
   try:
@@ -221,8 +232,6 @@ def price_unknown_token(token, router: str):
     price_of_underlying = priceOf(underlying, router_address=router)
     return price_of_underlying
   except ValueError as e:
-    # print(f"Error while fetching price of {token}: {e}")
-    # traceback.print_exc()
     pass
 
   # Try Curve LP Token with a minter
@@ -230,8 +239,6 @@ def price_unknown_token(token, router: str):
     curve_lp = interface.CurveLPToken(token)
     return priceOfCurveLPToken(curve_lp, router_address=router)
   except ValueError as e:
-    # print(f"Error while fetching price of {token}: {e}")
-    # traceback.print_exc()
     pass
 
   # Try Curve LP Token without a minter
@@ -239,16 +246,12 @@ def price_unknown_token(token, router: str):
     curve_lp = interface.CurvePool(token)
     return priceOfCurvePool(curve_lp, router_address=router)
   except ValueError as e:
-    # print(f"Error while fetching price of {token}: {e}")
-    # traceback.print_exc()
     pass
 
   # Try a yEarn vault
   try:
     return priceOfyEarnVaultShare(token, router_address=router)
   except ValueError as e:
-    # print(f"Error while fetching price of {token}: {e}")
-    # traceback.print_exc()
     pass
 
   # Try to price as a regular ERC20 traded on a dex
@@ -256,11 +259,10 @@ def price_unknown_token(token, router: str):
     erc20 = interface.IERC20(token)
     return priceOf(erc20, router_address=router)
   except ValueError as e:
-    # print(f"Error while fetching price of {token}: {e}")
-    # traceback.print_exc()
     pass
   
-  print(f"Can't price {token}")
+  # We sohuld never reach here if the token can be priced in some way
+  logger.error(f"Can't price {token}")
   return None
 
 def glpPrice(glp_manager):

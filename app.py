@@ -8,8 +8,18 @@ from prometheus_client import make_wsgi_app
 app = Flask(__name__)
 
 import sys
+import logging
 import os
 from brownie import project, network
+
+log_level = os.environ.get('LOGLEVEL', 'INFO').upper()
+logging.basicConfig(level=log_level)
+
+# Set logging level for some verbose modules
+logging.getLogger("urllib3.connectionpool").setLevel(logging.WARNING)
+logging.getLogger("web3.providers.HTTPProvider").setLevel(logging.WARNING)
+logging.getLogger("web3.RequestManager").setLevel(logging.WARNING)
+
 p = project.load()
 network.connect(os.environ.get('NETWORK', 'ethereum'))
 sys.modules["brownie"].interface = p.interface
