@@ -1,0 +1,3 @@
+{
+    "postCreateCommand": "/bin/bash /workspaces/token-price/init.sh"
+}
