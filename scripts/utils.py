@@ -6,6 +6,8 @@ from brownie import interface
 from brownie.exceptions import ContractNotFound
 from typing import List, Callable
 
+import scripts.chainlink as chainlink
+
 logger = logging.getLogger(__name__)
 
 DEFAULT_TTL_CACHE=60
@@ -73,25 +75,28 @@ def getUSDCPath(token: interface.IERC20, router: interface.UniswapRouterV2) -> L
   maxReserves = max(reservesInDAI, reservesInUSDC, reservesInWETH, reservesInUSDT)
 
   if reservesInDAI == maxReserves:
-    return [token, DAI()]
+    return ([token, DAI(), USDC()], priceOf(USDC(), router))
 
   if reservesInWETH == maxReserves:
-    return [token, WETH(), USDC()]
+    return ([token, WETH(), USDC()], priceOf(USDC(), router))
 
   if reservesInUSDT == maxReserves:
-    return [token, USDT()]
+    return ([token, USDT()], priceOf(USDT(), router))
 
-  return [token, USDC()]
+  return ([token, USDC()], priceOf(USDC(), router))
 
 @cachetools.func.ttl_cache(ttl=DEFAULT_TTL_CACHE)
 def priceOf(token: interface.IERC20, router_address: str) -> float:
-  if token == USDC() or token == USDT():
-    return 1.0
+  if token == USDC():
+    return chainlink.get_usdc_price()
+
+  if token == USDT():
+    return chainlink.get_usdt_price()
 
   router = interface.UniswapRouterV2(router_address)
-  path = getUSDCPath(token, router)
+  path, final_leg_price = getUSDCPath(token, router)
   logger.debug(f"Path for {token}: {path}")
-  return router.getAmountsOut(10 ** token.decimals() / 100, path)[-1] / 10 ** path[-1].decimals() * 100
+  return router.getAmountsOut(10 ** token.decimals() / 100, path)[-1] / 10 ** path[-1].decimals() * 100 * final_leg_price
 
 def priceOfyEarnVaultShare(token: interface.IERC20, router_address: str) -> float:
   yearn_vault = interface.yEarnVault(token)
