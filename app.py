@@ -24,7 +24,7 @@ p = project.load()
 network.connect(os.environ.get('NETWORK', 'ethereum'))
 sys.modules["brownie"].interface = p.interface
 
-from scripts.utils import priceOf, priceOf1InchPair, priceOfUniPair, priceOfCurveLPToken, priceOfCurvePool, homoraV2PositionSize, glpPrice, glpWeight, glpRewards, price_unknown_token
+from scripts.utils import priceOf, priceOf1InchPair, priceOfUniPair, priceOfCurveLPToken, priceOfCurvePool, homoraV2PositionSize, glpPrice, glpWeight, glpRewards, price_unknown_token, chainlink_oracle_price
 from scripts.the_graph import pairStats
 
 @app.route('/price/<address>')
@@ -32,6 +32,12 @@ def unknown_price(address):
   return str(price_unknown_token(
       address,
       router=request.args.get("router", "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D")
+  ))
+
+@app.route('/chainlink_oracle/<address>')
+def chainlink_oracle(address):
+  return str(chainlink_oracle_price(
+      address
   ))
 
 @app.route("/uniswap_pair_stats/<address>")

@@ -326,3 +326,11 @@ def glpRewards(rewards_tracker, address):
   decimals = tracker.decimals()
 
   return claimable / 10**decimals
+
+def chainlink_oracle_price(address):
+  oracle = interface.EACAggregatorProxy(address)
+
+  decimals = oracle.decimals()
+  answer = oracle.latestAnswer()
+
+  return answer / 10**decimals
